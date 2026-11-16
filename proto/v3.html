@@ -281,7 +281,38 @@ body.at-top .dropzone{display:block}
   transition:opacity .6s var(--slow),visibility 0s linear .6s}
 .dtme-ov.on{visibility:visible;opacity:1;transition:opacity .6s var(--slow),visibility 0s}
 /* 배경: DTME 호버 때의 거북이 사진, 약한 블러 + 살짝 어둡게 */
-.dtme-ov::before{content:'';position:absolute;inset:-12px;background:url('v3/dtme-bg.webp?v=3') center/cover no-repeat;filter:blur(5px);transform:scale(1.02)}
+.dtme-ov .pop-bg{position:absolute;inset:-14px;filter:blur(5px);transition:filter .65s var(--slow)}
+.dtme-ov .pop-bg img,.dtme-ov .pop-bg video{width:100%;height:100%;object-fit:cover;display:block;max-width:none}
+.dtme-ov .dtme-pay{justify-content:space-between}
+.dtme-ov .pop-open{font:600 14px/1 var(--sans);letter-spacing:.04em;color:#fff;background:#1b2a4e;padding:11px 20px;border-radius:999px;transition:background .3s}
+.dtme-ov .pop-open:hover{background:#2f4f78}
+/* [Open ↗]: 팝업이 흐려지며 사라지고 배경이 더 흐려진 뒤 이동 */
+.dtme-ov.go .dtme-pop{opacity:0;filter:blur(8px);transform:translateY(-8px) scale(.985);transition:opacity .55s var(--slow),filter .55s var(--slow),transform .55s var(--slow)}
+.dtme-ov.go .pop-bg{filter:blur(18px)}
+/* 머니파이 목업(가짜 데이터) */
+.dtme-ov .mp-app{background:#1d1e22;border-radius:8px;padding:10px;color:#ddd;font:10px/1.3 var(--sans)}
+.dtme-ov .mp-tk{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
+.dtme-ov .mp-tk div{background:#26272c;border:1px solid #303137;border-radius:5px;padding:5px 6px}
+.dtme-ov .mp-tk span{display:block;color:#9a9ca4;font-size:9px;margin-bottom:3px}
+.dtme-ov .mp-tk svg{width:100%;height:16px;display:block}
+.dtme-ov .mp-hd{display:flex;align-items:center;justify-content:space-between;margin:10px 2px 8px}
+.dtme-ov .mp-hd b{font-size:13px;letter-spacing:.08em;color:#f2f2f2;white-space:nowrap}
+.dtme-ov .mp-tabs{display:flex;gap:4px}.dtme-ov .mp-tabs i{font-style:normal;padding:4px 9px;border-radius:5px 5px 0 0;background:#26272c;color:#9a9ca4}
+.dtme-ov .mp-tabs i.on{background:#34353b;color:#fff}
+.dtme-ov .mp-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:#26272c;border-radius:6px;padding:10px}
+.dtme-ov .mp-c p{margin:0 0 6px;color:#cfcfcf;font-weight:600}
+.dtme-ov .mp-d{width:70%;display:block;margin:0 auto 8px;transform:rotate(0deg)}
+.dtme-ov .mp-c ul{list-style:none;margin:0;padding:0}.dtme-ov .mp-c li{display:flex;align-items:center;gap:5px;padding:1px 0;color:#bdbdbd}
+.dtme-ov .mp-c li i{width:7px;height:7px;border-radius:2px;flex:none}.dtme-ov .mp-c li b{margin-left:auto;font-weight:500;color:#e6e6e6}
+.dtme-ov .mp-note{margin:6px 2px 0;color:#6f727a;font-size:9px;text-align:right}
+/* DTMD 실제 화면 2장 */
+.dtme-ov .dt-shots{display:flex;gap:14px;justify-content:center;background:#284656;border-radius:8px;padding:16px}
+.dtme-ov .dt-shots img{width:46%;max-width:300px;border-radius:10px;box-shadow:0 12px 26px -12px rgba(0,0,0,.6)}
+/* MOSCO 준비 중 */
+.dtme-ov .mo-vis{position:relative;border-radius:8px;overflow:hidden}
+.dtme-ov .mo-vis img{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:50% 30%;display:block;max-width:none}
+.dtme-ov .mo-vis p{position:absolute;left:0;right:0;bottom:0;margin:0;padding:12px 16px;background:linear-gradient(transparent,rgba(0,0,0,.55));color:#fff;font-size:14px}
+@media (max-width:640px){.dtme-ov .mp-hd b{font-size:11px}.dtme-ov .mp-tabs i{padding:3px 5px;font-size:9px}.dtme-ov .mp-tk{grid-template-columns:repeat(3,1fr)}.dtme-ov .mp-g{grid-template-columns:1fr 1fr}.dtme-ov .mp-g .mp-c:last-child{display:none}}
 .dtme-ov::after{content:'';position:absolute;inset:0;background:rgba(10,16,22,.22)}
 .dtme-ov .dtme-pop{position:relative;z-index:1}
 .dtme-ov .dtme-pop{transform:translateY(-115vh);transition:transform .5s cubic-bezier(.6,0,.85,.2)}
@@ -296,7 +327,7 @@ body.at-top .dropzone{display:block}
 .app button.row{width:100%;background:none;border:0;font:inherit;color:inherit;text-align:left;cursor:pointer;transition:padding .5s var(--slow)}
 .app button.row:hover{padding-left:10px}
 .app button.row:hover .ar{transform:translateX(6px)}
-.drop [data-dtme]{cursor:pointer}
+.drop [data-pop]{cursor:pointer}
 </style>
 </head>
 <body>
@@ -312,10 +343,10 @@ body.at-top .dropzone{display:block}
 <!-- 첫 화면: 상단 가운데에 마우스를 올리거나 화면을 터치하면 앱 아이콘이 위에서 내려옴 -->
 <div class="dropzone" id="dz" aria-hidden="true"></div>
 <nav class="drop" id="drop" aria-label="Apps">
-  <a href="https://money.kangyonz.com/" data-label="Used to read numbers" data-bg="hov-money"><img src="v3/moneypie-duo.webp" alt="Used to read numbers"></a>
-  <a href="https://scuba.kangyonz.com/" data-label="Used at sea" data-bg="hov-dtmd"><img src="v3/dtmd-duo.webp" alt="Used at sea"></a>
-  <span data-label="Used back on land" data-bg="hov-dtme" data-dtme role="button" tabindex="0"><img src="v3/dtme-duo.webp" alt="Used back on land"></span>
-  <span data-label="Used to touch up" data-bg="hov-mosco"><img src="v3/mosco-duo.webp" alt="Used to touch up"></span>
+  <span data-label="Used to read numbers" data-bg="hov-money" data-pop="popMoney" role="button" tabindex="0"><img src="v3/moneypie-duo.webp" alt="Used to read numbers"></span>
+  <span data-label="Used at sea" data-bg="hov-dtmd" data-pop="popDtmd" role="button" tabindex="0"><img src="v3/dtmd-duo.webp" alt="Used at sea"></span>
+  <span data-label="Used back on land" data-bg="hov-dtme" data-pop="dtmeOv" role="button" tabindex="0"><img src="v3/dtme-duo.webp" alt="Used back on land"></span>
+  <span data-label="Used to touch up" data-bg="hov-mosco" data-pop="popMosco" role="button" tabindex="0"><img src="v3/mosco-duo.webp" alt="Used to touch up"></span>
 </nav>
 <div class="drop-lbl" id="dropLbl" aria-hidden="true"><span></span><span></span></div>
 
@@ -347,14 +378,14 @@ body.at-top .dropzone{display:block}
 <section class="blk panel sheet" id="apps"><div class="w" data-speed="1.35">
   <h2 class="reveal">Apps</h2>
   <ul class="apps">
-    <li class="app reveal"><a class="row" href="https://money.kangyonz.com/"><div class="ic"><img src="v3/moneypie-duo.webp" alt="" loading="lazy"></div>
-      <div><p class="nm">Used to read numbers</p></div><span class="ar">→</span></a></li>
-    <li class="app reveal"><a class="row" href="https://scuba.kangyonz.com/"><div class="ic"><img src="v3/dtmd-duo.webp" alt="" loading="lazy"></div>
-      <div><p class="nm">Used at sea</p></div><span class="ar">→</span></a></li>
-    <li class="app reveal"><button class="row" type="button" data-dtme><div class="ic"><img src="v3/dtme-duo.webp" alt="" loading="lazy"></div>
+    <li class="app reveal"><button class="row" type="button" data-pop="popMoney"><div class="ic"><img src="v3/moneypie-duo.webp" alt="" loading="lazy"></div>
+      <div><p class="nm">Used to read numbers</p></div><span class="ar">→</span></button></li>
+    <li class="app reveal"><button class="row" type="button" data-pop="popDtmd"><div class="ic"><img src="v3/dtmd-duo.webp" alt="" loading="lazy"></div>
+      <div><p class="nm">Used at sea</p></div><span class="ar">→</span></button></li>
+    <li class="app reveal"><button class="row" type="button" data-pop="dtmeOv"><div class="ic"><img src="v3/dtme-duo.webp" alt="" loading="lazy"></div>
       <div><p class="nm">Used back on land</p></div><span class="ar">→</span></button></li>
-    <li class="app reveal"><div class="row"><div class="ic"><img src="v3/mosco-duo.webp" alt="" loading="lazy"></div>
-      <div><p class="nm">Used to touch up</p></div><span class="ar"></span></div></li>
+    <li class="app reveal"><button class="row" type="button" data-pop="popMosco"><div class="ic"><img src="v3/mosco-duo.webp" alt="" loading="lazy"></div>
+      <div><p class="nm">Used to touch up</p></div><span class="ar">→</span></button></li>
   </ul>
 </div></section>
 
@@ -369,13 +400,56 @@ body.at-top .dropzone{display:block}
   </div>
 </footer>
 
+<!-- ===== 앱 팝업 (머니파이·DTMD·MOSCO + DTME) ===== -->
+<div class="dtme-ov" id="popMoney" onclick="if(event.target===this)popClose()">
+ <div class="pop-bg"><img src="v3/money3.webp" alt="" loading="lazy"></div>
+ <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="popMoneyT">
+  <div class="dtme-hd"><h2 id="popMoneyT">MONEY PIE</h2><p>Portfolio &amp; Allocation Tracker</p><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
+  <div class="dtme-bd">
+   <div class="mp-app" aria-label="Money Pie screen (sample data)">
+ <div class="mp-tk"><div><span>KOSPI</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#e86a8e" stroke-width="1.4" points="0,14 10,12 20,13 30,9 40,10 50,6 60,5"/></svg></div><div><span>NASDAQ</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#e86a8e" stroke-width="1.4" points="0,15 10,13 20,11 30,12 40,8 50,7 60,4"/></svg></div><div><span>S&amp;P 500</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#e86a8e" stroke-width="1.4" points="0,13 10,12 20,12 30,9 40,9 50,7 60,6"/></svg></div><div><span>US 10Y</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#5bb8e0" stroke-width="1.4" points="0,6 10,7 20,9 30,8 40,11 50,12 60,13"/></svg></div><div><span>USD/KRW</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#e86a8e" stroke-width="1.4" points="0,12 10,11 20,12 30,10 40,8 50,9 60,7"/></svg></div><div><span>Gold</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#e86a8e" stroke-width="1.4" points="0,15 10,14 20,12 30,11 40,8 50,6 60,3"/></svg></div></div>
+ <div class="mp-hd"><b>MONEY PIE</b><span class="mp-tabs"><i>Monthly</i><i class="on">Assets</i><i>V1</i><i>Watchlist</i></span></div>
+ <div class="mp-g"><div class="mp-c"><p>By account</p><svg viewBox="0 0 42 42" class="mp-d"><circle cx="21" cy="21" r="15.9" fill="none" stroke="#e86a8e" stroke-width="7" stroke-dasharray="38 62" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.9" fill="none" stroke="#f0a35e" stroke-width="7" stroke-dasharray="24 76" stroke-dashoffset="-13"/><circle cx="21" cy="21" r="15.9" fill="none" stroke="#5bb8e0" stroke-width="7" stroke-dasharray="22 78" stroke-dashoffset="-37"/><circle cx="21" cy="21" r="15.9" fill="none" stroke="#9b8fe0" stroke-width="7" stroke-dasharray="16 84" stroke-dashoffset="-59"/></svg><ul><li><i style="background:#e86a8e"></i>Pension<b>38%</b></li><li><i style="background:#f0a35e"></i>IRP<b>24%</b></li><li><i style="background:#5bb8e0"></i>ISA<b>22%</b></li><li><i style="background:#9b8fe0"></i>Brokerage<b>16%</b></li></ul></div><div class="mp-c"><p>By sector</p><svg viewBox="0 0 42 42" class="mp-d"><circle cx="21" cy="21" r="15.9" fill="none" stroke="#5bb8e0" stroke-width="7" stroke-dasharray="31 69" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.9" fill="none" stroke="#e86a8e" stroke-width="7" stroke-dasharray="17 83" stroke-dashoffset="-6"/><circle cx="21" cy="21" r="15.9" fill="none" stroke="#f0a35e" stroke-width="7" stroke-dasharray="14 86" stroke-dashoffset="-23"/><circle cx="21" cy="21" r="15.9" fill="none" stroke="#7fd1b0" stroke-width="7" stroke-dasharray="12 88" stroke-dashoffset="-37"/><circle cx="21" cy="21" r="15.9" fill="none" stroke="#d8d8d8" stroke-width="7" stroke-dasharray="9 91" stroke-dashoffset="-49"/><circle cx="21" cy="21" r="15.9" fill="none" stroke="#9b8fe0" stroke-width="7" stroke-dasharray="17 83" stroke-dashoffset="-58"/></svg><ul><li><i style="background:#5bb8e0"></i>Tech<b>31%</b></li><li><i style="background:#e86a8e"></i>Finance<b>17%</b></li><li><i style="background:#f0a35e"></i>Industrials<b>14%</b></li><li><i style="background:#7fd1b0"></i>Health<b>12%</b></li><li><i style="background:#d8d8d8"></i>Cash<b>9%</b></li><li><i style="background:#9b8fe0"></i>Other<b>17%</b></li></ul></div><div class="mp-c"><p>By region</p><svg viewBox="0 0 42 42" class="mp-d"><circle cx="21" cy="21" r="15.9" fill="none" stroke="#e86a8e" stroke-width="7" stroke-dasharray="54 46" stroke-dashoffset="25"/><circle cx="21" cy="21" r="15.9" fill="none" stroke="#5bb8e0" stroke-width="7" stroke-dasharray="39 61" stroke-dashoffset="-29"/><circle cx="21" cy="21" r="15.9" fill="none" stroke="#f0a35e" stroke-width="7" stroke-dasharray="7 93" stroke-dashoffset="-68"/></svg><ul><li><i style="background:#e86a8e"></i>Korea<b>54%</b></li><li><i style="background:#5bb8e0"></i>US<b>39%</b></li><li><i style="background:#f0a35e"></i>Other<b>7%</b></li></ul></div></div>
+ <p class="mp-note">Sample data</p>
+</div>
+   <div class="dtme-ft"><div><b>All Accounts, One View</b><span>Pension savings, IRP, ISA and brokerage accounts from different brokers in one place.</span></div><div><b>Allocation at a Glance</b><span>See your mix by sector, region and account type.</span></div><div><b>Monthly History</b><span>Save your assets each month and follow the trend.</span></div><div><b>Logic V1 Signals</b><span>Rule-based buy and sell notes that help curb emotional trading.</span></div><div><b>Watchlist</b><span>Keep an eye on the stocks you are considering.</span></div><div><b>Private by Design</b><span>No login, no broker linking. Your data stays in your browser.</span></div></div>
+   <p class="dtme-spec">Web · Free · Korean interface · Excel &amp; JSON backup</p>
+   <div class="dtme-pay"><code>kangyonz@gmail.com</code><a class="pop-open" href="https://money.kangyonz.com/" onclick="popGo(this,event)">Open ↗</a></div>
+  </div>
+ </div>
+</div>
+<div class="dtme-ov" id="popDtmd" onclick="if(event.target===this)popClose()">
+ <div class="pop-bg"><video data-src="v3/fish.mp4" poster="v3/fish-poster.jpg" muted loop playsinline preload="none"></video></div>
+ <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="popDtmdT">
+  <div class="dtme-hd"><h2 id="popDtmdT">DTMD</h2><p>Don’t Touch Maximum Depth — Dive Planner &amp; Logbook</p><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
+  <div class="dtme-bd">
+   <div class="dt-shots"><img src="v3/dtmd-shot1.webp" alt="DTMD planner screen" loading="lazy"><img src="v3/dtmd-shot2.webp" alt="DTMD logbook screen" loading="lazy"></div>
+   <div class="dtme-ft"><div><b>Dive Planner</b><span>Draw a depth profile and see the no-deco limit, ceiling and a suggested ascent.</span></div><div><b>3-Minute Tutorial</b><span>A voice-guided lesson on no-deco and deco basics.</span></div><div><b>Logbook Import</b><span>Reads FIT, UDDF and Suunto JSON from Garmin, Suunto, Amazfit and more.</span></div><div><b>Depth Graph &amp; Map</b><span>Replay each dive with entry and exit points on the map.</span></div><div><b>Photos &amp; Notes</b><span>Keep photos and memos with every dive.</span></div><div><b>9 Languages</b><span>English, Korean, Japanese, Chinese (Simplified &amp; Traditional), German, Spanish, French and Italian.</span></div></div>
+   <p class="dtme-spec">Web app · iPhone, Android &amp; PC · Add to Home Screen · Logs stay on your device</p>
+   <div class="dtme-pay"><code>kangyonz@gmail.com</code><a class="pop-open" href="https://scuba.kangyonz.com/" onclick="popGo(this,event)">Open ↗</a></div>
+  </div>
+ </div>
+</div>
+<div class="dtme-ov" id="popMosco" onclick="if(event.target===this)popClose()">
+ <div class="pop-bg"><img src="v3/mosco-bg.webp" alt="" loading="lazy"></div>
+ <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="popMoscoT">
+  <div class="dtme-hd"><h2 id="popMoscoT">MOSCO</h2><p>Photo Touch-up</p><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
+  <div class="dtme-bd">
+   <div class="mo-vis"><img src="v3/mosco-bg.webp" alt="" loading="lazy"><p>Details coming soon.</p></div>
+   
+   
+   <div class="dtme-pay"><code>kangyonz@gmail.com</code></div>
+  </div>
+ </div>
+</div>
 <!-- ===== DTME 팝업 ===== -->
-<div class="dtme-ov" id="dtmeOv" onclick="if(event.target===this)dtmeClose()">
+<div class="dtme-ov" id="dtmeOv" onclick="if(event.target===this)popClose()">
+ <div class="pop-bg"><img src="v3/dtme-bg.webp?v=3" alt="" loading="lazy"></div>
  <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="dtmeTitle">
   <div class="dtme-hd">
    <h2 id="dtmeTitle">DTME</h2>
    <p>Diving Tour Movie Editor</p>
-   <button class="dtme-x" onclick="dtmeClose()" aria-label="Close">✕</button>
+   <button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button>
   </div>
   <div class="dtme-bd">
 
@@ -464,14 +538,14 @@ body.at-top .dropzone{display:block}
  </div>
 </div>
 <script>
-function dtmeOpen(){var o=document.getElementById('dtmeOv');o.classList.add('on');document.body.style.overflow='hidden';}
-function dtmeClose(){document.getElementById('dtmeOv').classList.remove('on');document.body.style.overflow='';}
-document.addEventListener('keydown',function(e){if(e.key==='Escape')dtmeClose();});
-</script>
-<script>
-function dtmeOpen(){var o=document.getElementById('dtmeOv');o.classList.add('on');document.body.style.overflow='hidden';}
-function dtmeClose(){document.getElementById('dtmeOv').classList.remove('on');document.body.style.overflow='';}
-document.addEventListener('keydown',function(e){if(e.key==='Escape')dtmeClose();});
+/* 앱 팝업 공통: 열기·닫기·[Open ↗]으로 사라지며 이동 */
+function popOpen(id){var o=document.getElementById(id);if(!o)return;o.classList.remove('go');o.classList.add('on');document.body.style.overflow='hidden';
+  var v=o.querySelector('.pop-bg video');if(v){if(v.dataset.src){v.src=v.dataset.src;v.removeAttribute('data-src')}var pr=v.play();if(pr&&pr.catch)pr.catch(function(){})}}
+function popClose(){document.querySelectorAll('.dtme-ov.on').forEach(function(o){o.classList.remove('on');var v=o.querySelector('.pop-bg video');if(v)setTimeout(function(){v.pause()},700)});document.body.style.overflow='';}
+function dtmeOpen(){popOpen('dtmeOv')}function dtmeClose(){popClose()}
+function popGo(a,e){e.preventDefault();var o=a.closest('.dtme-ov');o.classList.add('go');setTimeout(function(){location.href=a.href},650)}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')popClose();});
+addEventListener('pageshow',function(e){if(e.persisted){document.querySelectorAll('.dtme-ov').forEach(function(o){o.classList.remove('on','go')});document.body.style.overflow=''}});
 </script>
 <script>
 (function(){
@@ -538,7 +612,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')dtmeClose();
   var typed='';
   addEventListener('keydown',function(e){
     if(e.altKey||e.ctrlKey||e.metaKey||e.key.length!==1)return;
-    if(document.getElementById('dtmeOv').classList.contains('on'))return;
+    if(document.querySelector('.dtme-ov.on'))return;
     if(scrollY>innerHeight*0.5){typed='';return}          // 첫 화면에서만
     typed=(typed+e.key.toUpperCase()).slice(-3);
     if(typed==='ART'||typed==='IZO')location.href='https://kangizo.com';
@@ -549,7 +623,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')dtmeClose();
   function topOf(el){return el.getBoundingClientRect().top+scrollY}
   addEventListener('keydown',function(e){
     if(e.altKey||e.ctrlKey||e.metaKey||/INPUT|TEXTAREA|SELECT/.test((e.target||{}).tagName))return;
-    if(document.getElementById('dtmeOv').classList.contains('on'))return;
+    if(document.querySelector('.dtme-ov.on'))return;
     var down=e.key==='ArrowDown'||e.key==='PageDown'||(e.key===' '&&!e.shiftKey),
         up=e.key==='ArrowUp'||e.key==='PageUp'||(e.key===' '&&e.shiftKey);
     if(!down&&!up)return;
@@ -638,8 +712,8 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')dtmeClose();
   addEventListener('scroll',topState,{passive:true});topState();
 
   // DTME 팝업 열기
-  document.querySelectorAll('[data-dtme]').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();dtmeOpen()});el.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();dtmeOpen()}})});
-  function popOpen(){return document.getElementById('dtmeOv').classList.contains('on')}
+  document.querySelectorAll('[data-pop]').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();popOpen(el.dataset.pop)});el.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();popOpen(el.dataset.pop)}})});
+  function anyPop(){return !!document.querySelector('.dtme-ov.on')}
 
   // 스크롤하면 서서히 나타남
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15});

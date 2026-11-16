@@ -23,7 +23,11 @@
      · 이미지는 사용자 PNG를 WebP 품질 90으로
 2. 소개 1줄 "필요해서 만든 것들을 모아 둡니다." (앞 2줄 삭제 2026-11-16)
 3. 고정 장면: 물고기떼 **영상**(글자 없음)(fish.mp4, 사용자 원본 그대로 720×1280·9초·3.4MB·소리 트랙 없음, 색·압축·속도 손대지 않음 / 포스터 fish-poster.jpg) — 페이지 로드 후 받고, 화면에 보일 때만 재생·반복. 스냅·방향키 모두 지나감
-4. 앱 4개 (이름 없이 설명만). 아이콘: 명암만 남겨 남색 #1f2f3d → 베이지 #b9ab98 → 미색 #f4f2ee 3단, 감마 0.7(비교안 C). 가장 어두운 부분 바닥 올림 L'=a+(1-a)L — DTMD a=0.24(바탕을 다른 아이콘 중간 밝기에 맞춤), 머니파이 a=0.24·DTME a=0.265(하위 2% 밝기를 DTMD·MOSCO 평균 약 117에 맞춤), MOSCO 없음. 진한 떠 있는 그림자
+4. 앱 4개 (이름 없이 설명만). **2026-11-16: 아이콘·목록 줄 모두 팝업을 엶(바로 링크로 가지 않음)** — 공통 틀 .dtme-ov(id: popMoney·popDtmd·dtmeOv·popMosco), popOpen(id)/popClose(). 팝업 배경 .pop-bg = 앱별 호버 배경(머니파이 money3 사진, DTMD 물고기 영상(열 때만 재생), DTME 거북이, MOSCO 공주) 블러 5px. 위에서 내려와 멈추는 등장, Esc·✕·바깥 클릭 닫기, 열린 동안 방향키·숨은 입력 무시.
+   - [Open ↗](링크 있는 앱만: 머니파이 money.kangyonz.com, DTMD scuba.kangyonz.com): 팝업이 흐려지며 사라지고 배경 블러 18px로 → 0.65초 뒤 이동. 뒤로 가기로 돌아오면(pageshow persisted) 팝업 닫힌 상태.
+   - 머니파이 팝업: 화면은 가짜 데이터 목업(HTML·SVG 도넛 3개, 'Sample data' 표시). 저장소의 0001~0004.png는 실제 계좌 금액이 보여 쓰지 않음. 기능 6개·사양은 moneypiee index.html·HANDOFF.md 기준으로 작성. 앱 UI는 한국어라 사양에 'Korean interface' 표기.
+   - DTMD 팝업: 실제 앱 영어 화면 2장(플래너·로그북 샘플, kangyonz index.html#en을 390×844로 캡처 → dtmd-shot1/2.webp). 기능 6개는 SCUBA_HANDOFF.md 기준.
+   - MOSCO 팝업: 내용 없음(공주 사진 + 'Details coming soon.'), 부제 'Photo Touch-up'. 사용자 내용 받으면 채울 것. 아이콘: 명암만 남겨 남색 #1f2f3d → 베이지 #b9ab98 → 미색 #f4f2ee 3단, 감마 0.7(비교안 C). 가장 어두운 부분 바닥 올림 L'=a+(1-a)L — DTMD a=0.24(바탕을 다른 아이콘 중간 밝기에 맞춤), 머니파이 a=0.24·DTME a=0.265(하위 2% 밝기를 DTMD·MOSCO 평균 약 117에 맞춤), MOSCO 없음. 진한 떠 있는 그림자
    - 숫자를 읽는 = 머니파이 → https://money.kangyonz.com/
    - 바다에서 쓰는 = DTMD → https://scuba.kangyonz.com/
    - 돌아와서 쓰는 = DTME → **소개 팝업**(사용자 제공 dtme-popup.html을 그대로 넣음. CSS는 .dtme-ov 안으로 범위 한정, 충돌 이름 .app→.dtme-app·.cap→.dtme-cap). 앱 목록 줄·첫 화면 내려오는 아이콘 클릭으로 열림, 열 때 배경은 거북이 사진(dtme-bg, 블러 5px·살짝 어둡게)으로 디졸브, 팝업은 위에서 떨어져 1.05초에 부드럽게 멈춤(cubic-bezier .16,1,.3,1) / 닫을 때 0.5초 가속하며 위로. ✕·바깥 클릭·Esc로 닫힘, 열린 동안 방향키·숨은 입력 무시
