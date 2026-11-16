@@ -126,7 +126,7 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(22px,3vw,30px);lette
 .pages a:hover .ar{transform:translateX(6px)}
 
 /* 푸터 */
-footer{position:relative;z-index:1;background:var(--deep);color:#cfc9bf;padding:80px 28px calc(48px + env(safe-area-inset-bottom))}
+footer{scroll-snap-align:end;position:relative;z-index:1;background:var(--deep);color:#cfc9bf;padding:80px 28px calc(48px + env(safe-area-inset-bottom))}
 footer .in{max-width:1040px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
 footer .logo{font-family:var(--serif);letter-spacing:.32em;font-size:15px;color:#fff}
 footer .fr{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
@@ -176,7 +176,6 @@ body.at-top .dropzone{display:block}
   <a class="logo" href="#top">KANGYONZ</a>
   <nav>
     <a href="#apps">앱</a>
-    <a href="#pages">페이지</a>
     <a href="#contact">연락</a>
   </nav>
 </header>
@@ -229,17 +228,7 @@ body.at-top .dropzone{display:block}
 </div></section>
 
 <!-- 서브페이지 -->
-<div class="panel endp">
-<section class="blk sheet" id="pages"><div class="w" data-speed="1.35">
-  <p class="eyebrow reveal">PAGES</p>
-  <ul class="pages reveal">
-    <li><a href="#"><span class="t">(서브페이지 1)</span><span class="s">한 줄 설명</span><span class="ar">→</span></a></li>
-    <li><a href="#"><span class="t">(서브페이지 2)</span><span class="s">한 줄 설명</span><span class="ar">→</span></a></li>
-    <li><a href="#"><span class="t">(서브페이지 3)</span><span class="s">한 줄 설명</span><span class="ar">→</span></a></li>
-  </ul>
-</div></section>
-
-<footer id="contact">
+ <footer id="contact">
   <div class="in">
     <div>
       <p class="logo">KANGYONZ</p>
@@ -248,7 +237,6 @@ body.at-top .dropzone{display:block}
     <div class="fr"><a class="top" href="#top" id="toTop">TOP ↑</a><small>© 2026 KANGYONZ · PROTO v3</small></div>
   </div>
 </footer>
-</div>
 
 <script>
 (function(){
@@ -316,7 +304,7 @@ body.at-top .dropzone{display:block}
   });
 
   // ── 방향키 한 번 = 한 화면 ──
-  var stops=[].slice.call(document.querySelectorAll('.panel:not(.win)')),busy=false;
+  var stops=[].slice.call(document.querySelectorAll('.panel:not(.win), footer')),busy=false;
   function topOf(el){return el.getBoundingClientRect().top+scrollY}
   addEventListener('keydown',function(e){
     if(e.altKey||e.ctrlKey||e.metaKey||/INPUT|TEXTAREA|SELECT/.test((e.target||{}).tagName))return;
