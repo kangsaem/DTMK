@@ -157,7 +157,7 @@ body.at-top .dropzone{display:block}
 .drop>*{position:relative}
 /* 아이콘 줄 아래 설명: 줄 너비에 꽉 차게, 디졸브 */
 .drop-lbl{position:fixed;left:50%;transform:translateX(-50%);z-index:22;pointer-events:none;height:60px}
-.drop-lbl span{position:absolute;left:0;right:0;top:0;text-align:center;white-space:nowrap;font-family:var(--serif);font-weight:400;line-height:1;
+.drop-lbl span{position:absolute;left:0;right:0;top:0;text-align:center;white-space:nowrap;font-family:var(--sans);font-weight:300;letter-spacing:.01em;line-height:1;
   color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.45);opacity:0;transition:opacity .8s var(--slow)}
 .drop-lbl span.on{opacity:1}
 
@@ -603,11 +603,13 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')dtmeClose();
   // 아이콘 줄 아래 큰 설명 글자
   var lbl=document.getElementById('dropLbl'),lsp=lbl.querySelectorAll('span'),lk=0,lblT=null;
   function placeLbl(){var r=drop.getBoundingClientRect();lbl.style.top=(r.bottom+22)+'px';lbl.style.width=r.width+'px'}
-  function fit(sp,text){                                   // 글자 폭이 아이콘 줄 폭과 같아지도록 크기 계산
-    sp.textContent=text;sp.style.fontSize='100px';sp.style.letterSpacing='.02em';
-    var w=sp.scrollWidth,W=lbl.getBoundingClientRect().width;
-    sp.style.fontSize=(100*W/w).toFixed(1)+'px';
+  var lblSize=0;
+  function calcSize(){                                    // 4개 문구 중 가장 작은 크기(가장 긴 문구가 줄 폭에 꽉 참)로 통일
+    placeLbl();var W=lbl.getBoundingClientRect().width,sp=lsp[0],keep=sp.textContent,min=1e9;
+    [].forEach.call(drop.children,function(el){sp.textContent=el.dataset.label;sp.style.fontSize='100px';min=Math.min(min,100*W/sp.scrollWidth)});
+    sp.textContent=keep;lblSize=min;lsp[0].style.fontSize=lsp[1].style.fontSize=min.toFixed(1)+'px';
   }
+  function fit(sp,text){if(!lblSize)calcSize();sp.textContent=text}
   function showLbl(text){
     clearTimeout(lblT);placeLbl();
     var cur=lsp[lk];if(cur.classList.contains('on')&&cur.textContent===text)return;
@@ -618,7 +620,8 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')dtmeClose();
     el.addEventListener('mouseenter',function(){if(drop.classList.contains('on'))showLbl(el.dataset.label)});
     el.addEventListener('mouseleave',hideLbl);
   });
-  addEventListener('resize',placeLbl);
+  addEventListener('resize',function(){lblSize=0;placeLbl()});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){lblSize=0});
   var _hide=hideDrop;hideDrop=function(){_hide();lsp[0].classList.remove('on');lsp[1].classList.remove('on')};
 
   function topState(){document.body.classList.toggle('at-top',atTop());if(!atTop())hideDrop()}
