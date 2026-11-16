@@ -71,8 +71,11 @@ img{display:block;max-width:100%}
 .hov{position:absolute;inset:0;opacity:0;z-index:1;transition:opacity 1.2s var(--slow)}
 .hov.on{opacity:1}
 .hov img,.hov video{width:100%;height:100%;object-fit:cover;display:block}
-.hov img{transform:scale(1.04);transition:transform 8s linear}
-.hov.on img{transform:scale(1.1)}
+.hov img{transform:scale(1)}
+.hov.on:not(.seq) img{animation:zin 9s linear forwards}            /* 한 장: 커서를 올린 동안 천천히 줌인 */
+.hov.seq img{position:absolute;inset:0;opacity:0;transition:opacity 1.4s var(--slow)}
+.hov.seq img.cur{opacity:1;animation:zin 6s linear forwards}       /* 여러 장: 차례로 줌인하며 겹쳐 바뀜 */
+@keyframes zin{from{transform:scale(1)}to{transform:scale(1.15)}}
 .hero .fix::after{content:'';position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(20,28,34,.28) 0%,rgba(20,28,34,0) 30%,rgba(20,28,34,0) 55%,rgba(20,28,34,.45) 100%);pointer-events:none}
 .hero .copy{position:absolute;left:28px;right:28px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:2;color:#fff}
 .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(26px,4.4vw,48px);line-height:1.45;letter-spacing:.04em}
@@ -190,8 +193,8 @@ body.at-top .dropzone{display:block}
 <nav class="drop" id="drop" aria-label="앱">
   <a href="https://money.kangyonz.com/" title="숫자를 읽는" data-bg="hov-money"><img src="v3/moneypie-duo.webp" alt="숫자를 읽는"></a>
   <a href="https://scuba.kangyonz.com/" title="바다에서 쓰는" data-bg="hov-dtmd"><img src="v3/dtmd-duo.webp" alt="바다에서 쓰는"></a>
-  <span title="돌아와서 쓰는"><img src="v3/dtme-duo.webp" alt="돌아와서 쓰는"></span>
-  <span title="반복해서 쓰는"><img src="v3/mosco-duo.webp" alt="반복해서 쓰는"></span>
+  <span title="돌아와서 쓰는" data-bg="hov-dtme"><img src="v3/dtme-duo.webp" alt="돌아와서 쓰는"></span>
+  <span title="반복해서 쓰는" data-bg="hov-mosco"><img src="v3/mosco-duo.webp" alt="반복해서 쓰는"></span>
 </nav>
 
 <!-- 첫 화면 -->
@@ -201,7 +204,9 @@ body.at-top .dropzone{display:block}
   <div class="slide"><img data-src="v3/g3.webp" alt=""></div>
   <div class="slide"><img data-src="v3/g4.webp" alt=""></div>
   <div class="hov" id="hov-dtmd"><video data-src="v3/fish.mp4" poster="v3/fish-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"></video></div>
-  <div class="hov" id="hov-money"><img data-src="v3/nyse.webp" alt=""></div>
+  <div class="hov seq" id="hov-money"><img data-src="v3/money1.webp" alt=""><img data-src="v3/money2.webp" alt=""><img data-src="v3/money3.webp" alt=""></div>
+  <div class="hov" id="hov-dtme"><img data-src="v3/dtme-bg.webp" alt=""></div>
+  <div class="hov" id="hov-mosco"><img data-src="v3/mosco-bg.webp" alt="" style="object-position:50% 30%"></div>
   </div>
   <div class="dots" id="dots" data-speed="0.5" data-fade></div>
 </div>
@@ -353,12 +358,16 @@ body.at-top .dropzone{display:block}
   // 아이콘에 커서를 올리면 첫 화면 배경을 바꿈 (DTMD → 물고기 영상, 머니파이 → 거래소 사진)
   [].forEach.call(drop.querySelectorAll('[data-bg]'),function(a){
     var layer=document.getElementById(a.dataset.bg),v=layer.querySelector('video');
+    var imgs=[].slice.call(layer.querySelectorAll('img')),seqT=null,si=0;
+    function seqStep(){imgs.forEach(function(im,k){im.classList.toggle('cur',k===si)});si=(si+1)%imgs.length;seqT=setTimeout(seqStep,4000)}
     a.addEventListener('mouseenter',function(){
       layer.classList.add('on');
+      if(layer.classList.contains('seq')){clearTimeout(seqT);si=0;seqStep()}
       if(v&&!still){if(v.dataset.src){v.src=v.dataset.src;v.removeAttribute('data-src')}var pr=v.play();if(pr&&pr.catch)pr.catch(function(){})}
     });
     a.addEventListener('mouseleave',function(){
-      layer.classList.remove('on');
+      layer.classList.remove('on');clearTimeout(seqT);
+      setTimeout(function(){if(!layer.classList.contains('on'))imgs.forEach(function(im){im.classList.remove('cur')})},1300);
       if(v)setTimeout(function(){if(!layer.classList.contains('on'))v.pause()},1300);
     });
   });
