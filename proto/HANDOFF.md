@@ -11,7 +11,7 @@
 - 배포 확인: push 후 `sync.yml`을 workflow_dispatch로 실행하면 1~2분 안에 반영.
 
 ## v3 현재 구성 (위→아래)
-**언어: 2026-11-16 홈페이지 전체를 영어로 전환**(lang=en). 앱 설명 = Reading the numbers(머니파이) / Used at sea(DTMD) / Used back on land(DTME) / Used again and again(MOSCO). 소개 = "A collection of things I made because I needed them." 메뉴 = Apps · Contact. DTME 팝업도 영문(편집 창 글자 9px로 줄여 넘침 방지). 아래 항목의 한글 문구는 영문 전환 전 기록.
+**언어: 2026-11-16 홈페이지 전체를 영어로 전환**(lang=en). 앱 설명 = Used to read numbers(머니파이) / Used at sea(DTMD) / Used back on land(DTME) / Used again and again(MOSCO). 소개 = "A collection of things I made because I needed them." 메뉴 = Apps · Contact. DTME 팝업도 영문(편집 창 글자 9px로 줄여 넘침 방지). 아래 항목의 한글 문구는 영문 전환 전 기록.
 1. 첫 화면: 임시 그림 3장(g1 수평선·g3 산·g4 해질녘) 8초마다 크로스페이드 + 천천히 확대(다음 그림이 1초 먼저 움직이고, 나가는 그림은 움직이며 사라짐 — 툭툭 걸림 해결). 글자 없음. 진행 표시줄만.
    - 숨은 입력: 첫 화면에서 키보드로 ART 또는 IZO → https://kangizo.com (폰은 키보드가 없어 미동작)
    - 앱 아이콘 내려오기: 상단 가운데(가로 40%·세로 30%) 마우스 올림 → 4개가 차례로 내려옴(투명도 없이 불투명), 벗어나면 0.7초 뒤 올라감. 터치·클릭하면 토글(6초 뒤 자동 숨김). 반 화면 이상 내리면 숨김
