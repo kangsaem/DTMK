@@ -151,9 +151,13 @@ footer small{font-size:11px;letter-spacing:.12em;opacity:.6}
 .dropzone{position:fixed;top:0;left:30%;width:40%;height:30vh;z-index:21;display:none}
 body.at-top .dropzone{display:block}
 .drop{position:fixed;top:calc(78px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:flex;gap:22px;z-index:22;pointer-events:none}
-.drop>*{display:block;width:60px;height:60px;border-radius:14px;overflow:hidden;transform:translateY(-260px);
+.drop>*{display:block;width:60px;height:60px;border-radius:14px;transform:translateY(-260px);
   transition:transform .55s cubic-bezier(.5,0,.75,0);box-shadow:0 28px 36px -14px rgba(20,28,34,.85),0 10px 16px -6px rgba(20,28,34,.35)}
-.drop>* img{width:100%;height:100%;object-fit:cover}
+.drop>* img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.drop>*{position:relative}
+.drop>*::after{content:attr(data-label);position:absolute;left:50%;top:calc(100% + 14px);transform:translateX(-50%);white-space:nowrap;
+  font-size:12px;letter-spacing:.06em;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .7s var(--slow)}
+.drop.on>*:hover::after,.drop.on>*:focus-visible::after{opacity:1}
 .drop.on{pointer-events:auto}
 .drop.on>*{transform:none;transition:transform 1.1s cubic-bezier(.16,1,.3,1)}
 .drop.on>*:nth-child(2){transition-delay:.08s}.drop.on>*:nth-child(3){transition-delay:.16s}.drop.on>*:nth-child(4){transition-delay:.24s}
@@ -294,10 +298,10 @@ body.at-top .dropzone{display:block}
 <!-- 첫 화면: 상단 가운데에 마우스를 올리거나 화면을 터치하면 앱 아이콘이 위에서 내려옴 -->
 <div class="dropzone" id="dz" aria-hidden="true"></div>
 <nav class="drop" id="drop" aria-label="Apps">
-  <a href="https://money.kangyonz.com/" title="Used to read numbers" data-bg="hov-money"><img src="v3/moneypie-duo.webp" alt="Used to read numbers"></a>
-  <a href="https://scuba.kangyonz.com/" title="Used at sea" data-bg="hov-dtmd"><img src="v3/dtmd-duo.webp" alt="Used at sea"></a>
-  <span title="Used back on land" data-bg="hov-dtme" data-dtme role="button" tabindex="0"><img src="v3/dtme-duo.webp" alt="Used back on land"></span>
-  <span title="Used again and again" data-bg="hov-mosco"><img src="v3/mosco-duo.webp" alt="Used again and again"></span>
+  <a href="https://money.kangyonz.com/" data-label="Used to read numbers" data-bg="hov-money"><img src="v3/moneypie-duo.webp" alt="Used to read numbers"></a>
+  <a href="https://scuba.kangyonz.com/" data-label="Used at sea" data-bg="hov-dtmd"><img src="v3/dtmd-duo.webp" alt="Used at sea"></a>
+  <span data-label="Used back on land" data-bg="hov-dtme" data-dtme role="button" tabindex="0"><img src="v3/dtme-duo.webp" alt="Used back on land"></span>
+  <span data-label="Used again and again" data-bg="hov-mosco"><img src="v3/mosco-duo.webp" alt="Used again and again"></span>
 </nav>
 
 <!-- 첫 화면 -->
