@@ -178,6 +178,102 @@ body.at-top .dropzone{display:block}
   .slide.run img,.hov.seq img.run,.hero .dots i.on::after,.hero .scroll::after{animation:none}
   .reveal{opacity:1;transform:none;transition:none}
 }
+/* ===== DTME 팝업 (사용자 제공 dtme-popup.html, .dtme-ov 안으로 범위 한정, .app→.dtme-app·.cap→.dtme-cap) ===== */
+.dtme-link{font:700 15px/1 "Segoe UI",system-ui,sans-serif;letter-spacing:2px;color:#4FB3E8;cursor:pointer;background:none;border:0;padding:4px 2px}
+.dtme-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;z-index:9999}
+.dtme-ov.on{display:flex}
+.dtme-ov .dtme-pop{background:#fff;color:#1b2a4e;width:760px;max-width:100%;max-height:calc(100vh - 32px);overflow:auto;border-radius:12px;font:15px/1.6 "Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif}
+.dtme-ov .dtme-pop *{box-sizing:border-box}
+.dtme-ov .dtme-hd{position:relative;padding:22px 26px 14px}
+.dtme-ov .dtme-hd h2{margin:0;font:700 30px/1 "Segoe UI",system-ui,sans-serif;letter-spacing:3px}
+.dtme-ov .dtme-hd p{margin:6px 0 0;color:#5b6780;font-size:14px}
+.dtme-ov .dtme-x{position:absolute;right:14px;top:14px;width:32px;height:32px;border-radius:16px;border:0;background:#f1f3f6;color:#5b6780;font-size:16px;cursor:pointer}
+.dtme-ov .dtme-x:hover{background:#c0392b;color:#fff}
+.dtme-ov .dtme-app{background:#2b2b2b;border-radius:8px;overflow:hidden;font:10px/1.25 "Malgun Gothic","Segoe UI",sans-serif;color:#e0e0e0;user-select:none}
+.dtme-ov .dtme-app-t{height:22px;display:flex;align-items:center;padding:0 8px;background:#1f1f1f;color:#cfcfcf;font-size:10px}
+.dtme-ov .dtme-app-tb{display:flex;gap:4px;padding:3px 5px;background:#232323;border-bottom:1px solid #333}
+.dtme-ov .k{background:linear-gradient(#444,#383838);border:1px solid #1c1c1c;border-radius:3px;padding:3px 6px;text-align:center;white-space:nowrap;color:#e0e0e0}
+.dtme-ov .k.red{background:#c0392b;border-color:#8e2a20;color:#fff;font-weight:700}
+.dtme-ov .k.navy{background:#2f3b4d;color:#e6e6e6}
+.dtme-ov .k.cut{background:#3a3a26}
+.dtme-ov .k.on{background:#2f4f78;color:#fff}
+.dtme-ov .k.y{color:#f2c94c}
+.dtme-ov .k.kon{background:#5a4a1a;color:#f2c94c}
+.dtme-ov .dtme-app-m{display:grid;grid-template-columns:23% 1fr 18%;gap:5px;padding:5px}
+.dtme-ov .col{display:flex;flex-direction:column;gap:3px;min-width:0;overflow:hidden}
+.dtme-ov .dtme-app-m>.col:first-child .k,.dtme-ov .dtme-app-m>.col:last-child .k{padding:3px 3px}
+.dtme-ov .r{display:flex;gap:3px;align-items:center}
+.dtme-ov .r .k{flex:1}
+.dtme-ov .cutrow{gap:2px}
+.dtme-ov .cutrow .k{padding:3px 3px;font-size:9px}
+.dtme-ov .cutrow .k[style*=margin-left]{margin-left:3px!important}
+.dtme-ov .sec{background:#2b2b2b;border:1px solid #3a3a3a;border-radius:2px;padding:2px 5px;font-weight:700;color:#e0e0e0}
+.dtme-ov .sl{display:flex;align-items:center;gap:4px;padding:1px 2px}
+.dtme-ov .sl span{width:44px;flex:none;color:#cfcfcf;white-space:nowrap}
+.dtme-ov .sl i{flex:1;height:3px;background:#555;border-radius:2px;position:relative}
+.dtme-ov .sl i::after{content:"";position:absolute;top:-3px;width:8px;height:8px;border-radius:4px;background:#ddd;left:var(--p,50%)}
+.dtme-ov .sl b{width:22px;text-align:right;font-weight:400;color:#bdbdbd}
+.dtme-ov .sel{background:#1e1e1e;border:1px solid #3a3a3a;border-radius:2px;padding:2px 5px;color:#ddd}
+.dtme-ov .mon{position:relative;aspect-ratio:16/9;background:linear-gradient(170deg,#2a8fb8 0%,#14628c 45%,#0a3956 100%);overflow:hidden}
+.dtme-ov .sea,.dtme-ov .bgv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;overflow:hidden}
+.dtme-ov .mon .gr{position:absolute;inset:0;width:100%;height:100%}
+.dtme-ov .ray{position:absolute;top:-10%;left:20%;width:12%;height:90%;background:linear-gradient(rgba(255,255,255,.18),transparent);transform:skewX(-18deg);animation:ray 6s ease-in-out infinite alternate}
+.dtme-ov .ray.r2{left:48%;width:8%;animation-delay:-2s}
+.dtme-ov .ray.r3{left:70%;width:14%;animation-delay:-4s}
+@keyframes ray{from{opacity:.4}to{opacity:1}}
+.dtme-ov .fish{position:absolute;width:12%;animation:swim 14s linear infinite}
+.dtme-ov .fish.f1{top:22%;animation-duration:13s}
+.dtme-ov .fish.f2{top:44%;width:9%;animation-duration:17s;animation-delay:-6s}
+.dtme-ov .fish.f3{top:12%;width:7%;animation-duration:21s;animation-delay:-11s;opacity:.8}
+@keyframes swim{0%{left:105%;transform:translateY(0)}25%{transform:translateY(-6px)}50%{transform:translateY(4px)}75%{transform:translateY(-3px)}100%{left:-15%;transform:translateY(0)}}
+.dtme-ov .school{position:absolute;top:30%;width:40%;animation:swim 24s linear infinite;animation-delay:-9s}
+.dtme-ov .school svg{width:100%;display:block}
+.dtme-ov .bub{position:absolute;bottom:-5%;left:30%;width:4px;height:4px;border:1px solid rgba(255,255,255,.7);border-radius:50%;animation:bub 5s linear infinite}
+.dtme-ov .bub.b2{left:62%;animation-delay:-2s;animation-duration:6s}
+.dtme-ov .bub.b3{left:84%;width:3px;height:3px;animation-delay:-4s}
+@keyframes bub{to{bottom:105%;transform:translateX(6px)}}
+@media (prefers-reduced-motion:reduce){.dtme-ov .fish,.dtme-ov .school,.dtme-ov .bub,.dtme-ov .ray{animation:none}}
+.dtme-ov .mon .db{position:absolute;left:4%;bottom:7%;background:#fff;color:#1b2a4e;font:700 9px/1 "Segoe UI",sans-serif;padding:3px 6px}
+.dtme-ov .mon .lg{position:absolute;right:4%;top:6%;font:700 9px/1.3 "Segoe UI",sans-serif;text-align:right;color:#fff}
+.dtme-ov .sbar{height:9px;background:#1a1a1a;position:relative}
+.dtme-ov .sbar i{position:absolute;top:0;bottom:0;background:#3a3a26}
+.dtme-ov .sbar b{position:absolute;top:-2px;bottom:-2px;width:2px;background:#e8e8e8}
+.dtme-ov .tc{background:#000;color:#e8e8e8;font:11px Consolas,monospace;padding:1px 6px;border-radius:2px}
+.dtme-ov .st{background:#1c1c1c;border-radius:3px;padding:2px 5px;color:#7fd18b}
+.dtme-ov .tl{background:#1e1e1e;padding:3px;border-radius:2px}
+.dtme-ov .trk{display:flex;gap:2px;height:15px;margin:2px 0}
+.dtme-ov .trk i{display:block;border-radius:2px;position:relative}
+.dtme-ov .v i{background:#c9c9c9}
+.dtme-ov .v i.lg2::after{content:"LOG";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:700 7px sans-serif;color:#fff;background:#2f4f78;padding:0 2px;border-radius:2px}
+.dtme-ov .m i{background:#4a2c40;border:1px solid #d97fb8}
+.dtme-ov .tx i{background:#5a5a5a}
+.dtme-ov .ruler{height:8px;background:repeating-linear-gradient(90deg,#555 0 1px,transparent 1px 22px);opacity:.7}
+.dtme-ov .lst{background:#1a1a1a;border-radius:2px;padding:2px;display:flex;flex-direction:column;gap:2px}
+.dtme-ov .lst div{display:flex;gap:4px;align-items:center;padding:2px;border-radius:2px}
+.dtme-ov .lst div.s{background:#2f4f78}
+.dtme-ov .lst i{width:30px;height:17px;flex:none;background:linear-gradient(#1f6f9a,#0c3550);border-radius:1px}
+.dtme-ov .lst span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#f2f2f2}
+.dtme-ov .mus{color:#8fc4a4}
+.dtme-ov .dtme-cap{margin:6px 0 0;color:#8a93a6;font-size:12px;text-align:center}
+@media (max-width:640px){.dtme-ov .dtme-app-m{grid-template-columns:1fr}
+.dtme-ov .dtme-app-m>.col:first-child,.dtme-ov .dtme-app-m>.col:last-child{display:none}}
+.dtme-ov .dtme-ft{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px 22px;margin:18px 0}
+.dtme-ov .dtme-ft b{display:block;font-size:15px}
+.dtme-ov .dtme-ft span{color:#5b6780;font-size:14px}
+.dtme-ov .dtme-spec{margin:0 0 18px;color:#8a93a6;font-size:13px}
+.dtme-ov .dtme-bd{padding:0 26px 22px}
+.dtme-ov .dtme-pay{border-top:1px solid #e6eaf0;padding-top:14px;display:flex;gap:10px;align-items:center}
+.dtme-ov .dtme-pay code{font:600 15px Consolas,monospace;color:#1b2a4e;background:#f4f7fb;padding:2px 8px;border-radius:4px}
+@media (max-width:560px){.dtme-ov .dtme-hd h2{font-size:24px}}
+.dtme-ov{font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif}
+.dtme-ov p{margin:0}
+.dtme-ov .dtme-hd p{margin:6px 0 0}.dtme-ov .dtme-cap{margin:6px 0 0}.dtme-ov .dtme-spec{margin:0 0 18px}
+
+/* 앱 목록에서 누를 수 있는 줄 */
+.app button.row{width:100%;background:none;border:0;font:inherit;color:inherit;text-align:left;cursor:pointer;transition:padding .5s var(--slow)}
+.app button.row:hover{padding-left:10px}
+.app button.row:hover .ar{transform:translateX(6px)}
+.drop [data-dtme]{cursor:pointer}
 </style>
 </head>
 <body>
@@ -195,7 +291,7 @@ body.at-top .dropzone{display:block}
 <nav class="drop" id="drop" aria-label="앱">
   <a href="https://money.kangyonz.com/" title="숫자를 읽는" data-bg="hov-money"><img src="v3/moneypie-duo.webp" alt="숫자를 읽는"></a>
   <a href="https://scuba.kangyonz.com/" title="바다에서 쓰는" data-bg="hov-dtmd"><img src="v3/dtmd-duo.webp" alt="바다에서 쓰는"></a>
-  <span title="돌아와서 쓰는" data-bg="hov-dtme"><img src="v3/dtme-duo.webp" alt="돌아와서 쓰는"></span>
+  <span title="돌아와서 쓰는" data-bg="hov-dtme" data-dtme role="button" tabindex="0"><img src="v3/dtme-duo.webp" alt="돌아와서 쓰는"></span>
   <span title="반복해서 쓰는" data-bg="hov-mosco"><img src="v3/mosco-duo.webp" alt="반복해서 쓰는"></span>
 </nav>
 
@@ -232,8 +328,8 @@ body.at-top .dropzone{display:block}
       <div><p class="nm">숫자를 읽는</p></div><span class="ar">→</span></a></li>
     <li class="app reveal"><a class="row" href="https://scuba.kangyonz.com/"><div class="ic"><img src="v3/dtmd-duo.webp" alt="" loading="lazy"></div>
       <div><p class="nm">바다에서 쓰는</p></div><span class="ar">→</span></a></li>
-    <li class="app reveal"><div class="row"><div class="ic"><img src="v3/dtme-duo.webp" alt="" loading="lazy"></div>
-      <div><p class="nm">돌아와서 쓰는</p></div><span class="ar"></span></div></li>
+    <li class="app reveal"><button class="row" type="button" data-dtme><div class="ic"><img src="v3/dtme-duo.webp" alt="" loading="lazy"></div>
+      <div><p class="nm">돌아와서 쓰는</p></div><span class="ar">→</span></button></li>
     <li class="app reveal"><div class="row"><div class="ic"><img src="v3/mosco-duo.webp" alt="" loading="lazy"></div>
       <div><p class="nm">반복해서 쓰는</p></div><span class="ar"></span></div></li>
   </ul>
@@ -250,6 +346,111 @@ body.at-top .dropzone{display:block}
   </div>
 </footer>
 
+<!-- ===== DTME 팝업 ===== -->
+<div class="dtme-ov" id="dtmeOv" onclick="if(event.target===this)dtmeClose()">
+ <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="dtmeTitle">
+  <div class="dtme-hd">
+   <h2 id="dtmeTitle">DTME</h2>
+   <p>Diving Tour Movie Editor</p>
+   <button class="dtme-x" onclick="dtmeClose()" aria-label="닫기">✕</button>
+  </div>
+  <div class="dtme-bd">
+
+   <div class="dtme-app" aria-label="DTME 편집 창 화면">
+    <div class="dtme-app-t">DTME v0.16.95 — 다이빙_2025_10.dtme.json</div>
+    <div class="dtme-app-tb"><span class="k">새 프로젝트</span><span class="k">저장하기</span><span class="k">불러오기</span><span class="k">실행취소</span><span class="k">다시 실행</span><span class="k">되살리기</span></div>
+    <div class="dtme-app-m">
+     <div class="col">
+      <div class="r"><span class="k" style="flex:0">리셋</span><span class="k" style="flex:0">기본값</span><span style="flex:1"></span><span class="k" style="flex:0">기본값 저장</span></div>
+      <div class="r"><span class="k" style="text-align:left">프리셋 ▾</span><span class="k" style="flex:0">저장…</span></div>
+      <div class="r"><span class="sel" style="flex:1">1920×1080 ▾</span><span class="k" style="flex:0">오디오</span></div>
+      <div class="r"><span class="k on">보정</span><span class="k">원본</span><span class="k">좌우</span><span class="k" style="flex:0">RGB</span></div>
+      <div class="sec">▾  색</div>
+      <div class="sl"><span>빨강</span><i style="--p:62%"></i><b>18</b></div>
+      <div class="sl"><span>파랑</span><i style="--p:40%"></i><b>-6</b></div>
+      <div class="sl"><span>색조</span><i></i><b>0</b></div>
+      <div class="sl"><span>채도</span><i style="--p:58%"></i><b>12</b></div>
+      <div class="sl"><span>물빛</span><i style="--p:66%"></i><b>24</b></div>
+      <div class="sl"><span>녹황 빼기</span><i style="--p:30%"></i><b>8</b></div>
+      <div class="r"><span class="k">흰색 찍기</span><span class="k">LUT 추가…</span></div>
+      <div class="sec">▸  디테일</div>
+      <div class="sec">▸  렌즈 · 흔들림</div>
+     </div>
+     <div class="col">
+      <div class="mon">
+       <!-- 실제 물고기 영상으로 바꾸려면: 아래 .sea 대신 <video class="bgv" src="fish.mp4" autoplay muted loop playsinline></video> -->
+       <div class="sea" aria-hidden="true">
+        <i class="ray"></i><i class="ray r2"></i><i class="ray r3"></i>
+        <svg class="fish f1" viewBox="0 0 40 20"><path d="M2 10 Q14 0 28 10 Q14 20 2 10Z M28 10 L38 3 L36 10 L38 17Z" fill="#f2c94c"/><circle cx="9" cy="9" r="1.3" fill="#0b2d44"/></svg>
+        <svg class="fish f2" viewBox="0 0 40 20"><path d="M2 10 Q14 0 28 10 Q14 20 2 10Z M28 10 L38 3 L36 10 L38 17Z" fill="#ff8a5c"/><circle cx="9" cy="9" r="1.3" fill="#0b2d44"/></svg>
+        <svg class="fish f3" viewBox="0 0 40 20"><path d="M2 10 Q14 0 28 10 Q14 20 2 10Z M28 10 L38 3 L36 10 L38 17Z" fill="#cfe9f5"/><circle cx="9" cy="9" r="1.3" fill="#0b2d44"/></svg>
+        <div class="school"><svg viewBox="0 0 120 40"><g fill="#bfe3f2" fill-opacity=".85"><path d="M5 10 l8 -3 v6z"/><path d="M20 4 l8 -3 v6z"/><path d="M18 18 l8 -3 v6z"/><path d="M34 12 l8 -3 v6z"/><path d="M48 6 l8 -3 v6z"/><path d="M46 22 l8 -3 v6z"/><path d="M62 14 l8 -3 v6z"/><path d="M76 8 l8 -3 v6z"/><path d="M74 26 l8 -3 v6z"/><path d="M90 16 l8 -3 v6z"/><path d="M32 28 l8 -3 v6z"/><path d="M60 32 l8 -3 v6z"/></g></svg></div>
+        <i class="bub"></i><i class="bub b2"></i><i class="bub b3"></i>
+       </div>
+       <svg class="gr" viewBox="0 0 160 90" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M8 46 L13 58 L17 52 L22 69 L26 61 L31 77 L35 66 L40 80 L45 70 L50 83 L55 64 L59 75 L64 57 L69 72 L74 60 L79 79 L84 66 L89 74 L94 55 L99 67 L104 59 L109 71 L114 53 L119 62 L124 49 L128 56 L128 86 L8 86 Z" fill="#1d4f9e" fill-opacity=".35"/>
+        <path d="M8 46 L13 58 L17 52 L22 69 L26 61 L31 77 L35 66 L40 80 L45 70 L50 83 L55 64 L59 75 L64 57 L69 72 L74 60 L79 79 L84 66 L89 74 L94 55 L99 67 L104 59 L109 71 L114 53 L119 62 L124 49 L128 56" fill="none" stroke="#fff" stroke-width=".9" stroke-linejoin="round"/>
+        <circle cx="128" cy="56" r="1.8" fill="#fff"/>
+       </svg>
+       <div class="lg">24.6 m<br><span style="font-weight:400;opacity:.85">MAX 33.1 m</span></div>
+       <div class="db">2025.10.20</div>
+      </div>
+      <div class="sbar"><i style="left:22%;width:31%"></i><b style="left:38%"></b></div>
+      <div class="r" style="justify-content:space-between"><span style="color:#cfcfcf;white-space:nowrap">☑ 정지 시 보정</span>
+       <span class="r"><span class="k y">key◀</span><span class="k">◀◀</span><span class="k">◀|</span><span class="k">▶ / ❚❚</span><span class="k">|▶</span><span class="k">▶▶</span><span class="k y">key▶</span></span>
+       <span class="tc">00:41.12</span></div>
+      <div class="r cutrow" style="justify-content:center"><span class="k cut" style="flex:0">[ 컷인</span><span class="k cut" style="flex:0">컷아웃 ]</span><span class="k" style="flex:0">IO 해제</span><span class="k" style="flex:0">삭제</span><span class="k" style="flex:0;margin-left:6px">×2</span><span class="k on" style="flex:0">×1</span><span class="k" style="flex:0">×½</span><span class="k" style="flex:0;margin-left:6px">샘플</span><span class="k" style="flex:0">★</span><span class="k" style="flex:0">글자</span><span class="k" style="flex:0">사각형</span><span class="k red" style="flex:0;margin-left:6px">스틸</span><span class="k red" style="flex:0">➜</span></div>
+      <div class="st">자동 편집 완료 — 컷 24개 · 3:00</div>
+      <div class="r" style="justify-content:space-between"><span class="r"><span class="k red" style="flex:0">자동 편집</span><span class="k" style="flex:0">컷편집</span><span style="color:#aaa">타임라인 3:00</span><span class="k" style="flex:0">LOG 전체</span></span><span class="k navy" style="flex:0">▼</span><span class="r"><span class="k kon" style="flex:0">맞춤</span><span class="k" style="flex:0">전체 삭제</span><span class="k red" style="flex:0">➜</span></span></div>
+      <div class="tl">
+       <div class="ruler"></div>
+       <div class="trk tx"><i style="width:8%"></i></div>
+       <div class="trk v"><i style="width:8%;background:#888"></i><i class="lg2" style="width:13%"></i><i class="lg2" style="width:11%"></i><i style="width:8%"></i><i class="lg2" style="width:15%"></i><i class="lg2" style="width:12%"></i><i style="width:10%"></i><i style="width:12%;background:#888"></i></div>
+       <div class="trk m"><i style="width:50%"></i><i style="width:46%"></i></div>
+      </div>
+     </div>
+     <div class="col">
+      <div class="r"><span class="k">파일 추가</span><span class="k red" style="flex:1.3">AUTO</span><span class="k">삭제</span></div>
+      <div class="lst">
+       <div class="s"><i></i><span>GX010231.MP4</span></div>
+       <div><i></i><span>GX010232.MP4</span></div>
+       <div><i style="background:linear-gradient(#2c9fc4,#11506f)"></i><span>GX010233.MP4</span></div>
+       <div><i style="background:linear-gradient(#7fb7c9,#1d6b8c)"></i><span>GX010240.MP4</span></div>
+      </div>
+      <div class="lst mus"><div><span>♪ Underwater.mp3</span></div><div><span>♪ Blue Hour.mp3</span></div></div>
+      <div class="r" style="margin-top:4px"><span class="k navy" style="flex:0">▼</span><span style="flex:1"></span><span class="k" style="flex:0">⚙</span><span class="k red" style="flex:0;padding:3px 10px">렌더</span></div>
+      <div class="lst" style="flex:1;min-height:40px"><div><span style="color:#cfcfcf">타임라인 3:00 · 1080p</span></div></div>
+     </div>
+    </div>
+   </div>
+   <p class="dtme-cap">편집 창 · 왼쪽 보정, 가운데 화면과 타임라인, 오른쪽 소스와 렌더</p>
+
+
+   <div class="dtme-ft">
+    <div><b>자동 편집</b><span>긴 원본에서 좋은 장면을 골라 정한 길이(예: 3분)로 자릅니다.</span></div>
+    <div><b>수중 색 보정</b><span>물속의 푸른 끼를 장면마다 자동으로 잡습니다.</span></div>
+    <div><b>수심 그래프</b><span>Garmin FIT · 다이브 로그를 읽어 컷마다 수심 그래프를 얹습니다.</span></div>
+    <div><b>음악 박자 맞춤</b><span>넣은 음악의 마디에 맞춰 컷이 바뀌고, 물 밖 장면은 원래 소리가 들립니다.</span></div>
+    <div><b>시작 · 끝 화면</b><span>지명과 날짜를 찾아 제목과 엔딩을 만듭니다.</span></div>
+    <div><b>가로 · 세로</b><span>4K까지, 가로 영상과 세로(쇼츠) 영상을 모두 만듭니다.</span></div>
+   </div>
+   <p class="dtme-spec">Windows 10 / 11 · NVIDIA 그래픽이면 렌더 가속 · 설치 없이 압축 풀고 실행</p>
+
+   <div class="dtme-pay"><code>kangyonz@gmail.com</code></div>
+
+  </div>
+ </div>
+</div>
+<script>
+function dtmeOpen(){var o=document.getElementById('dtmeOv');o.classList.add('on');document.body.style.overflow='hidden';}
+function dtmeClose(){document.getElementById('dtmeOv').classList.remove('on');document.body.style.overflow='';}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')dtmeClose();});
+</script>
+<script>
+function dtmeOpen(){var o=document.getElementById('dtmeOv');o.classList.add('on');document.body.style.overflow='hidden';}
+function dtmeClose(){document.getElementById('dtmeOv').classList.remove('on');document.body.style.overflow='';}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')dtmeClose();});
+</script>
 <script>
 (function(){
   // 슬라이드: 8초마다 크로스페이드. 첫 장만 먼저, 나머지는 페이지 로드 후 받기
@@ -315,6 +516,7 @@ body.at-top .dropzone{display:block}
   var typed='';
   addEventListener('keydown',function(e){
     if(e.altKey||e.ctrlKey||e.metaKey||e.key.length!==1)return;
+    if(document.getElementById('dtmeOv').classList.contains('on'))return;
     if(scrollY>innerHeight*0.5){typed='';return}          // 첫 화면에서만
     typed=(typed+e.key.toUpperCase()).slice(-3);
     if(typed==='ART'||typed==='IZO')location.href='https://kangizo.com';
@@ -325,6 +527,7 @@ body.at-top .dropzone{display:block}
   function topOf(el){return el.getBoundingClientRect().top+scrollY}
   addEventListener('keydown',function(e){
     if(e.altKey||e.ctrlKey||e.metaKey||/INPUT|TEXTAREA|SELECT/.test((e.target||{}).tagName))return;
+    if(document.getElementById('dtmeOv').classList.contains('on'))return;
     var down=e.key==='ArrowDown'||e.key==='PageDown'||(e.key===' '&&!e.shiftKey),
         up=e.key==='ArrowUp'||e.key==='PageUp'||(e.key===' '&&e.shiftKey);
     if(!down&&!up)return;
@@ -387,6 +590,10 @@ body.at-top .dropzone{display:block}
   });
   function topState(){document.body.classList.toggle('at-top',atTop());if(!atTop())hideDrop()}
   addEventListener('scroll',topState,{passive:true});topState();
+
+  // DTME 팝업 열기
+  document.querySelectorAll('[data-dtme]').forEach(function(el){el.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();dtmeOpen()});el.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();dtmeOpen()}})});
+  function popOpen(){return document.getElementById('dtmeOv').classList.contains('on')}
 
   // 스크롤하면 서서히 나타남
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15});
