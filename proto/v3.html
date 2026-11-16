@@ -64,8 +64,8 @@ img{display:block;max-width:100%}
 .slide{position:absolute;inset:0;opacity:0;transition:opacity 2.8s var(--slow)}
 .slide img{width:100%;height:100%;object-fit:cover;transform:scale(1.02)}
 .slide.on{opacity:1}
-.slide.on img{animation:kb 14s linear forwards}
-.slide:nth-child(even).on img{animation-name:kb2}
+.slide.run img{animation:kb 15s linear forwards}
+.slide:nth-child(even).run img{animation-name:kb2}
 @keyframes kb {from{transform:scale(1.02) translate(0,0)}to{transform:scale(1.12) translate(-1.5%,-1%)}}
 @keyframes kb2{from{transform:scale(1.12) translate(1%,0)}to{transform:scale(1.03) translate(0,1%)}}
 .hov{position:absolute;inset:0;opacity:0;z-index:1;transition:opacity 1.2s var(--slow)}
@@ -74,7 +74,8 @@ img{display:block;max-width:100%}
 .hov img{transform:scale(1)}
 .hov.on:not(.seq) img{animation:zin 9s linear forwards}            /* 한 장: 커서를 올린 동안 천천히 줌인 */
 .hov.seq img{position:absolute;inset:0;opacity:0;transition:opacity 1.4s var(--slow)}
-.hov.seq img.cur{opacity:1;animation:zin 6s linear forwards}       /* 여러 장: 차례로 줌인하며 겹쳐 바뀜 */
+.hov.seq img.cur{opacity:1}
+.hov.seq img.run{animation:zin 7.5s linear forwards}       /* 여러 장: 차례로 줌인하며 겹쳐 바뀜 */
 @keyframes zin{from{transform:scale(1)}to{transform:scale(1.15)}}
 .hero .fix::after{content:'';position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(20,28,34,.28) 0%,rgba(20,28,34,0) 30%,rgba(20,28,34,0) 55%,rgba(20,28,34,.45) 100%);pointer-events:none}
 .hero .copy{position:absolute;left:28px;right:28px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:2;color:#fff}
@@ -173,7 +174,7 @@ body.at-top .dropzone{display:block}
 }
 /* 움직임 줄이기 설정 존중 */
 @media (prefers-reduced-motion:reduce){
-  .slide.on img,.hero .dots i.on::after,.hero .scroll::after{animation:none}
+  .slide.run img,.hov.seq img.run,.hero .dots i.on::after,.hero .scroll::after{animation:none}
   .reveal{opacity:1;transform:none;transition:none}
 }
 </style>
@@ -200,11 +201,11 @@ body.at-top .dropzone{display:block}
 <!-- 첫 화면 -->
 <div class="hero panel" id="top">
   <div class="fix" data-speed="0.3">
-  <div class="slide on"><img src="v3/g1.webp" alt=""></div>
+  <div class="slide on run"><img src="v3/g1.webp" alt=""></div>
   <div class="slide"><img data-src="v3/g3.webp" alt=""></div>
   <div class="slide"><img data-src="v3/g4.webp" alt=""></div>
   <div class="hov" id="hov-dtmd"><video data-src="v3/fish.mp4" poster="v3/fish-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"></video></div>
-  <div class="hov seq" id="hov-money"><img data-src="v3/money1.webp" alt=""><img data-src="v3/money2.webp" alt=""><img data-src="v3/money3.webp" alt=""><img data-src="v3/money4.webp" alt=""></div>
+  <div class="hov seq" id="hov-money"><img data-src="v3/money2.webp" alt=""><img data-src="v3/money3.webp" alt=""><img data-src="v3/money4.webp" alt=""></div>
   <div class="hov" id="hov-dtme"><img data-src="v3/dtme-bg.webp" alt=""></div>
   <div class="hov" id="hov-mosco"><img data-src="v3/mosco-bg.webp" alt="" style="object-position:50% 30%"></div>
   </div>
@@ -265,10 +266,15 @@ body.at-top .dropzone{display:block}
   function go(){
     var n=(i+1)%N,im=slides[n].querySelector('img');
     if(im.dataset.src||!im.complete){setTimeout(go,1000);return}   // 아직 안 받았으면 기다림
-    slides[i].classList.remove('on');ds[i].className='';
-    void ds[n].offsetWidth;
-    slides[n].classList.add('on');ds[n].className='on';i=n;
-    setTimeout(go,T);
+    var prev=slides[i];
+    slides[n].classList.add('run');                          // 다음 그림이 먼저 움직이기 시작
+    setTimeout(function(){
+      prev.classList.remove('on');ds[i].className='';        // 나가는 그림은 움직임을 유지한 채 사라짐
+      void ds[n].offsetWidth;
+      slides[n].classList.add('on');ds[n].className='on';i=n;
+      setTimeout(function(){if(!prev.classList.contains('on'))prev.classList.remove('run')},3200);
+      setTimeout(go,T-1000);
+    },1000);
   }
   if(!still)setTimeout(go,T);
   // 탭이 숨겨지면 멈췄다가 다시 시작해 슬라이드가 몰려 넘어가지 않게
@@ -359,15 +365,22 @@ body.at-top .dropzone{display:block}
   [].forEach.call(drop.querySelectorAll('[data-bg]'),function(a){
     var layer=document.getElementById(a.dataset.bg),v=layer.querySelector('video');
     var imgs=[].slice.call(layer.querySelectorAll('img')),seqT=null,si=0;
-    function seqStep(){imgs.forEach(function(im,k){im.classList.toggle('cur',k===si)});si=(si+1)%imgs.length;seqT=setTimeout(seqStep,4000)}
+    var preT=null,curK=-1;
+    function seqShow(k){                                     // 다음 그림은 0.8초 먼저 움직이고, 나가는 그림은 움직이며 사라짐
+      var p=curK;imgs[k].classList.add('run','cur');
+      if(p>=0&&p!==k){imgs[p].classList.remove('cur');setTimeout(function(){if(!imgs[p].classList.contains('cur'))imgs[p].classList.remove('run')},1700)}
+      curK=k;var nx=(k+1)%imgs.length;
+      preT=setTimeout(function(){imgs[nx].classList.add('run')},3200);
+      seqT=setTimeout(function(){seqShow(nx)},4000);
+    }
     a.addEventListener('mouseenter',function(){
       layer.classList.add('on');
-      if(layer.classList.contains('seq')){clearTimeout(seqT);si=0;seqStep()}
+      if(layer.classList.contains('seq')){clearTimeout(seqT);clearTimeout(preT);curK=-1;imgs.forEach(function(im){im.classList.remove('cur','run')});seqShow(0)}
       if(v&&!still){if(v.dataset.src){v.src=v.dataset.src;v.removeAttribute('data-src')}var pr=v.play();if(pr&&pr.catch)pr.catch(function(){})}
     });
     a.addEventListener('mouseleave',function(){
-      layer.classList.remove('on');clearTimeout(seqT);
-      setTimeout(function(){if(!layer.classList.contains('on'))imgs.forEach(function(im){im.classList.remove('cur')})},1300);
+      layer.classList.remove('on');clearTimeout(seqT);clearTimeout(preT);
+      setTimeout(function(){if(!layer.classList.contains('on'))imgs.forEach(function(im){im.classList.remove('cur','run')});curK=-1},1300);
       if(v)setTimeout(function(){if(!layer.classList.contains('on'))v.pause()},1300);
     });
   });
