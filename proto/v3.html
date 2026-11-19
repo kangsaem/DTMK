@@ -419,7 +419,7 @@ body.at-top .dropzone{display:block}
 <div class="sp-ov" id="splash" aria-hidden="true">
  <div class="sp-box">
   <video data-app="dtmeOv" data-src="v3/dtme-start.mp4" poster="v3/dtme-start.jpg" muted playsinline preload="none"></video>
-  <video data-app="popDtmc" data-src="v3/dtmc-start.mp4" poster="v3/dtmc-start.jpg" muted playsinline preload="none"></video>
+  <video data-app="popDtmc" data-lead="1.6" data-src="v3/dtmc-start.mp4" poster="v3/dtmc-start.jpg" muted playsinline preload="none"></video>
   <video data-app="popMosco" data-src="v3/mosco-start.mp4" poster="v3/mosco-start.jpg" muted playsinline preload="none"></video>
  </div>
 </div>
@@ -587,7 +587,8 @@ function spFinish(){                                    // 팝업을 내리고, 
   setTimeout(function(){spOv.classList.remove('on','out');spOv.setAttribute('aria-hidden','true');if(v){v.pause();v.classList.remove('cur')}},1050)}
 function spWatch(){                                      // 끝나기 1초 전을 매 프레임 확인
   if(!spTarget||!spV)return;var d=spV.duration;
-  if(d&&isFinite(d)&&spV.currentTime>=d-1){spFinish();return}
+  var lead=parseFloat(spV.dataset.lead||'1');            // 디졸브 시작: 끝나기 lead초 전 (DTMC는 움직임이 일찍 잦아들어 1.6초)
+  if(d&&isFinite(d)&&spV.currentTime>=d-lead){spFinish();return}
   requestAnimationFrame(spWatch)}
 function appOpen(id){
   spOv=spOv||document.getElementById('splash');var v=spVideo(id);
