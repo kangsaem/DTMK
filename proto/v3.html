@@ -331,6 +331,7 @@ body.at-top .dropzone{display:block}
 .sp-box{position:relative;width:min(92vw,calc(86vh * 800 / 1120),800px);width:min(92vw,calc(86svh * 800 / 1120),800px);aspect-ratio:800/1120;border-radius:12px;overflow:hidden;background:#222;
   box-shadow:0 40px 80px -30px rgba(0,0,0,.7);transform:scale(.96);transition:transform .7s cubic-bezier(.16,1,.3,1)}
 .sp-ov.on .sp-box{transform:none}
+.sp-ov.on.out{z-index:10000;opacity:0;pointer-events:none;transition:opacity 1s linear,visibility 0s}   /* 마지막 1초: 팝업 위에서 디졸브로 사라짐 */
 .sp-box video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
 .sp-box video.cur{display:block}
 /* 앱 목록에서 누를 수 있는 줄 */
@@ -581,8 +582,13 @@ function popGo(a,e){e.preventDefault();var o=a.closest('.dtme-ov');o.classList.a
 var spOv=null,spV=null,spTarget=null;
 function spVideo(id){return document.querySelector('#splash video[data-app="'+id+'"]')}
 function spLoad(v){if(v&&v.dataset.src){v.src=v.dataset.src;v.removeAttribute('data-src');v.preload='auto'}}
-function spFinish(){if(!spTarget)return;var t=spTarget;spTarget=null;popOpen(t);
-  setTimeout(function(){spOv.classList.remove('on');spOv.setAttribute('aria-hidden','true');if(spV){spV.pause();spV.classList.remove('cur')}},350)}
+function spFinish(){                                    // 팝업을 내리고, 영상은 1초 동안 디졸브로 사라짐
+  if(!spTarget)return;var t=spTarget,v=spV;spTarget=null;popOpen(t);spOv.classList.add('out');
+  setTimeout(function(){spOv.classList.remove('on','out');spOv.setAttribute('aria-hidden','true');if(v){v.pause();v.classList.remove('cur')}},1050)}
+function spWatch(){                                      // 끝나기 1초 전을 매 프레임 확인
+  if(!spTarget||!spV)return;var d=spV.duration;
+  if(d&&isFinite(d)&&spV.currentTime>=d-1){spFinish();return}
+  requestAnimationFrame(spWatch)}
 function appOpen(id){
   spOv=spOv||document.getElementById('splash');var v=spVideo(id);
   if(!v||matchMedia('(prefers-reduced-motion: reduce)').matches){popOpen(id);return}
@@ -590,8 +596,9 @@ function appOpen(id){
   document.querySelectorAll('#splash video').forEach(function(x){x.classList.toggle('cur',x===v)});
   try{v.currentTime=0}catch(e){}
   spOv.classList.add('on');spOv.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
+  spOv.classList.remove('out');
   var pr=v.play();if(pr&&pr.catch)pr.catch(function(){});
-  v.onended=spFinish;
+  v.onended=spFinish;requestAnimationFrame(spWatch);
 }
 document.addEventListener('click',function(e){if(spTarget&&e.target.closest('#splash'))spFinish()});
 document.addEventListener('keydown',function(e){if(spTarget&&e.key==='Escape'){e.stopImmediatePropagation();spFinish()}},true);

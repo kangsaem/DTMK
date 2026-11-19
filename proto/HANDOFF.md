@@ -28,7 +28,7 @@
    - 머니파이 팝업: 화면은 가짜 데이터 목업(HTML·SVG 도넛 3개, 'Sample data' 표시). 저장소의 0001~0004.png는 실제 계좌 금액이 보여 쓰지 않음. 기능 6개·사양은 moneypiee index.html·HANDOFF.md 기준으로 작성. 앱 UI는 한국어라 사양에 'Korean interface' 표기.
    - DTMD 팝업: 실제 앱 영어 화면 2장(플래너·로그북 샘플, kangyonz index.html#en을 390×844로 캡처 → dtmd-shot1/2.webp). 기능 6개는 SCUBA_HANDOFF.md 기준.
    - **2026-11-19 DTMC 추가(5번째 앱, 순서: 머니파이·DTMD·DTME·DTMC·MOSCO)**: 문구 'Used to compose', 아이콘 dtmc-duo(C안 톤, 바닥 a=0.26), 호버 배경 dtmc-bg(미쿠·베토벤, 경계 626.8/1254로 거의 정중앙이라 자르지 않음) 줌인, 팝업 popDtmc(부제 Desktop Music Composer, 'Details coming soon.'). 그림의 미쿠 코스프레는 크립톤 캐릭터 — 공개 전 이용 조건 확인 권함.
-   - **시작 영상(DTME·DTMC·MOSCO)**: 아이콘·목록 줄을 누르면 배경 블러(10px)+가운데 세로 영상(800×1120, 앱 창처럼, AUTO 버튼·커서 포함 원본 그대로, faststart만 정리) 재생 → 끝나면 팝업이 내려옴. 화면 클릭·Esc로 바로 팝업(별도 Skip 버튼 없음). 커서를 올리면 영상 미리 받기. 머니파이·DTMD는 영상 없이 바로 팝업. 동작 줄이기 설정이면 영상 생략. appOpen(id) → 영상 있으면 재생, 없으면 popOpen.
+   - **시작 영상(DTME·DTMC·MOSCO)**: 아이콘·목록 줄을 누르면 배경 블러(10px)+가운데 세로 영상(800×1120, 앱 창처럼, AUTO 버튼·커서 포함 원본 그대로, faststart만 정리) 재생 → 끝나기 1초 전(매 프레임 확인)에 팝업이 내려오기 시작하고, 영상 창은 팝업 위(z 10000)에서 마지막 1초 동안 디졸브로 사라짐. 클릭·Esc로 넘길 때도 같은 1초 디졸브. 화면 클릭·Esc로 바로 팝업(별도 Skip 버튼 없음). 커서를 올리면 영상 미리 받기. 머니파이·DTMD는 영상 없이 바로 팝업. 동작 줄이기 설정이면 영상 생략. appOpen(id) → 영상 있으면 재생, 없으면 popOpen.
    - 아이콘 5개라 줄 아래 설명 글자 크기 1280px 화면 기준 약 37px(가장 긴 'Used to read numbers' 기준 통일)
    - MOSCO 팝업: 내용 없음(공주 사진 + 'Details coming soon.'), 부제 'Photo Touch-up'. 사용자 내용 받으면 채울 것. 아이콘: 명암만 남겨 남색 #1f2f3d → 베이지 #b9ab98 → 미색 #f4f2ee 3단, 감마 0.7(비교안 C). 가장 어두운 부분 바닥 올림 L'=a+(1-a)L — DTMD a=0.24(바탕을 다른 아이콘 중간 밝기에 맞춤), 머니파이 a=0.24·DTME a=0.265(하위 2% 밝기를 DTMD·MOSCO 평균 약 117에 맞춤), MOSCO a=0.285(2026-11-19 모나리자 모자이크 → 공주·마녀 실사로 교체, ?v=2). 진한 떠 있는 그림자
    - 숫자를 읽는 = 머니파이 → https://money.kangyonz.com/
