@@ -333,7 +333,12 @@ body.at-top .dropzone{display:block}
 .dtme-ov .dtme-bd{padding:16px 20px 22px!important}
 /* 단계 1: 배경만 선명하게(카드 숨김) → 이후 흐려지며 카드 등장 */
 .dtme-ov.stage .pop-bg{filter:none!important}
-.dtme-ov.wait .dtme-pop{opacity:0!important;transition:none!important}      /* 시작 영상 재생 중: 배경만 흐리게, 카드는 대기 */
+.dtme-ov.wait .dtme-pop{opacity:0!important;transition:none!important}
+/* 첫 화면에서 열면(live): 팝업용 배경을 깔지 않고, 움직이던 첫 화면을 그대로 흐리게 */
+.dtme-ov.live{background:transparent!important}
+.dtme-ov.live .pop-bg{display:none}
+.dtme-ov.live.on{-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
+.dtme-ov.live.go{-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}      /* 시작 영상 재생 중: 배경만 흐리게, 카드는 대기 */
 .dtme-ov.on .pop-bg img{animation:zin 14s linear forwards}                /* 팝업 배경도 천천히 줌인(멈춘 화면 방지) */
 .dtme-ov.stage{cursor:pointer}
 .dtme-ov.stage::after{background:transparent!important}
@@ -645,8 +650,9 @@ function popOpen(id,fromVideo){                         // 카드 보이기(배�
   document.body.style.overflow='hidden';var pop=o.querySelector('.dtme-pop');if(pop)pop.scrollTop=0;
 }
 function popClose(){clearTimeout(stageT);stageNext=null;heroLock=false;heroLayer=null;
+  document.querySelectorAll('.dtme-ov.live').forEach(function(o){setTimeout(function(){if(!o.classList.contains('on'))o.classList.remove('live')},700)});
   document.querySelectorAll('.dtme-ov .pop-bg img').forEach(function(i){i.style.animation=''});
-  document.querySelectorAll('.hov.on').forEach(function(l){l.classList.remove('on');var v=l.querySelector('video');if(v)v.pause()});
+  document.querySelectorAll('.hov.on').forEach(function(l){var ic=document.querySelector('#drop [data-bg="'+l.id+'"]');if(ic&&ic.matches(':hover'))return;l.classList.remove('on');var v=l.querySelector('video');if(v)v.pause()});
   document.querySelectorAll('.dtme-ov.on').forEach(function(o){o.classList.remove('on','stage','wait','from-video');var v=o.querySelector('.pop-bg video');if(v)setTimeout(function(){v.pause()},700)});
   if(spOv&&spOv.classList.contains('on')){spOv.classList.remove('on','out');spTarget=null;if(spV){spV.pause();spV.classList.remove('cur')}}
   document.body.style.overflow='';}
@@ -693,9 +699,8 @@ function syncBg(o,layer){                                // 첫 화면 배경(�
     pi.style.animation='zin '+(d/1000)+'s linear '+(-t/1000)+'s forwards'}
   else pi.style.animation='';
 }
-function afterStage(id){                                 // 단계 1 다음: 영상 있으면 배경을 흐리게 깔고 영상, 없으면 바로 카드
-  heroLock=false;var o=document.getElementById(id);
-  syncBg(o,heroLayer);heroLayer=null;
+function afterStage(id){                                 // 영상 있으면 배경을 흐리게 깔고 영상, 없으면 바로 카드
+  var o=document.getElementById(id);
   o.classList.remove('go','from-video','stage');
   if(spVideo(id)){o.classList.add('wait','on');bgPlay(o);document.body.style.overflow='hidden';spStart(id)}
   else popOpen(id);
@@ -703,10 +708,14 @@ function afterStage(id){                                 // 단계 1 다음: 영
 function appOpen(id,src){                                // 아이콘·목록 클릭: 지연 없이 바로 영상(있으면) 또는 팝업
   var o=document.getElementById(id);if(!o)return;
   spOv=spOv||document.getElementById('splash');spLoad(spVideo(id));
-  if(reduced()){popOpen(id);return}
   var heroIcon=src&&src.closest&&src.closest('#drop')&&scrollY<innerHeight*0.5;
-  heroLayer=heroIcon&&src.dataset.bg?document.getElementById(src.dataset.bg):null;
-  if(!heroLayer){var pi0=o.querySelector('.pop-bg img');if(pi0)pi0.style.animation=''}
+  o.classList.toggle('live',!!heroIcon);
+  if(heroIcon){                                          // 첫 화면 배경은 원래 가던 대로 계속(커서가 나가도 끄지 않음)
+    heroLock=true;
+    var bg=src.dataset.bg&&document.getElementById(src.dataset.bg);
+    if(bg&&!bg.classList.contains('on'))src.dispatchEvent(new Event('mouseenter'));
+  }
+  if(reduced()){popOpen(id);return}
   afterStage(id);
 }
 document.addEventListener('click',function(e){if(stageNext&&(heroLock||e.target.closest('.dtme-ov.stage'))){e.stopPropagation();e.preventDefault();stageGo()}},true);
