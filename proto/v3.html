@@ -359,7 +359,7 @@ body.at-top .dropzone{display:block}
 <!-- 첫 화면: 상단 가운데에 마우스를 올리거나 화면을 터치하면 앱 아이콘이 위에서 내려옴 -->
 <div class="dropzone" id="dz" aria-hidden="true"></div>
 <nav class="drop" id="drop" aria-label="Apps">
-  <span data-label="Used to make pages" data-pop="popWeb" role="button" tabindex="0"><img src="v3/web-line.png?v=1" alt="Used to make pages"></span>
+  <span data-label="Used to make pages" data-bg="hov-web" data-pop="popWeb" role="button" tabindex="0"><img src="v3/web-line.png?v=1" alt="Used to make pages"></span>
   <span data-label="Used to read numbers" data-bg="hov-money" data-pop="popMoney" role="button" tabindex="0"><img src="v3/moneypie-line.png?v=4" alt="Used to read numbers"></span>
   <span data-label="Used at sea" data-bg="hov-dtmd" data-pop="popDtmd" role="button" tabindex="0"><img src="v3/dtmd-line.png?v=4" alt="Used at sea"></span>
   <span data-label="Used back on land" data-bg="hov-dtme" data-pop="dtmeOv" role="button" tabindex="0"><img src="v3/dtme-line.png?v=4" alt="Used back on land"></span>
@@ -377,6 +377,7 @@ body.at-top .dropzone{display:block}
   <div class="hov" id="hov-dtmd"><video data-src="v3/fish.mp4" poster="v3/fish-poster.jpg" muted loop playsinline preload="none" aria-hidden="true"></video></div>
   <div class="hov seq" id="hov-money"><img data-src="v3/money2.webp" alt=""><img data-src="v3/money3.webp" alt=""><img data-src="v3/money4.webp" alt=""></div>
   <div class="hov" id="hov-dtme"><img data-src="v3/dtme-bg.webp?v=3" alt=""></div>
+  <div class="hov" id="hov-web"><img data-src="v3/web-bg.webp" alt=""></div>
   <div class="hov" id="hov-dtmc"><img data-src="v3/dtmc-bg.webp" alt=""></div>
   <div class="hov" id="hov-mosco"><img data-src="v3/mosco-bg.webp" alt="" style="object-position:50% 30%"></div>
   </div>
@@ -472,7 +473,7 @@ body.at-top .dropzone{display:block}
  </div>
 </div>
 <div class="dtme-ov" id="popWeb" onclick="if(event.target===this)popClose()">
- <div class="pop-bg" style="background:#e9e5dd"></div>
+ <div class="pop-bg"><img src="v3/web-bg.webp" alt="" loading="lazy"></div>
  <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="popWebT">
   <div class="dtme-hd"><h2 id="popWebT">WEB EDITOR</h2><p>Website Editor</p><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
   <div class="dtme-bd">
