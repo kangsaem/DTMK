@@ -286,7 +286,7 @@ body.at-top .dropzone{display:block}
   transition:opacity .6s var(--slow),visibility 0s linear .6s}
 .dtme-ov.on{visibility:visible;opacity:1;transition:opacity .6s var(--slow),visibility 0s}
 /* 배경: DTME 호버 때의 거북이 사진, 약한 블러 + 살짝 어둡게 */
-.dtme-ov .pop-bg{position:absolute;inset:-14px;filter:blur(5px);transition:filter .65s var(--slow)}
+.dtme-ov .pop-bg{position:absolute;inset:0;filter:blur(5px);transition:filter .65s var(--slow)}
 .dtme-ov .pop-bg img,.dtme-ov .pop-bg video{width:100%;height:100%;object-fit:cover;display:block;max-width:none}
 .dtme-ov .dtme-pay{justify-content:space-between}
 .dtme-ov .pop-open{font:600 14px/1 var(--sans);letter-spacing:.04em;color:#fff;background:#1b2a4e;padding:11px 20px;border-radius:999px;transition:background .3s}
@@ -348,6 +348,16 @@ body.at-top .dropzone{display:block}
 .dtme-ov .dt-shots{padding:12px!important;gap:10px!important}
 .dtme-ov .dtme-app .r{flex-wrap:wrap;row-gap:3px}.dtme-ov .dtme-app .cutrow{justify-content:flex-start!important}
 .dtme-ov .dtme-app .cutrow .k[style*=margin-left]{margin-left:0!important}
+/* WMW 팝업 */
+.dtme-ov .wmw-logo{height:26px;width:auto;display:block}
+.dtme-ov .wm-shot{border-radius:8px;overflow:hidden;box-shadow:0 10px 24px -14px rgba(0,0,0,.5)}
+.dtme-ov .wm-shot img{width:100%;display:block}
+/* 클릭한 자리에서 빛이 한 번 퍼짐 */
+.ripple{position:fixed;z-index:10006;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,255,255,.85) 0%,rgba(255,250,235,.45) 35%,rgba(255,255,255,0) 70%);
+  animation:ripple .9s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes ripple{from{transform:scale(1);opacity:1}to{transform:scale(18);opacity:0}}
+@media (prefers-reduced-motion:reduce){.ripple{display:none}}
 /* Coming soon 작은 창 */
 .soon{position:fixed;left:50%;top:50%;z-index:10005;transform:translate(-50%,-40%);opacity:0;visibility:hidden;pointer-events:none;
   background:rgba(27,42,78,.94);color:#fff;font:600 15px/1 var(--sans);letter-spacing:.06em;padding:18px 28px;border-radius:12px;box-shadow:0 20px 40px -16px rgba(0,0,0,.6);
@@ -506,9 +516,18 @@ body.at-top .dropzone{display:block}
 <div class="dtme-ov" id="popWeb" onclick="if(!event.target.closest('.dtme-pop')&&!this.classList.contains('stage'))popClose()">
  <div class="pop-bg"><img src="v3/web-bg.webp" alt=""></div>
  <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="popWebT">
-  <div class="dtme-hd"><h2 id="popWebT">WEB EDITOR</h2><p>Website Editor</p><a class="pop-open" href="#" onclick="popSoon(event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
+  <div class="dtme-hd"><h2 id="popWebT"><img class="wmw-logo" src="v3/wmw-logo.svg" alt="WMW"></h2><p>Web made in web</p><a class="pop-open" href="https://site.kangyonz.com/" onclick="popGo(this,event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
   <div class="dtme-bd">
-   <div class="mo-vis" style="background:#f4f2ee;display:grid;place-items:center;aspect-ratio:16/9"><img src="v3/web-line.png?v=1" alt="" loading="lazy" style="width:28%;aspect-ratio:1;border-radius:22%;position:static"><p>Details coming soon.</p></div>
+   <div class="wm-shot"><img src="v3/wmw-shot.webp" alt="WMW editor screen" loading="lazy"></div>
+   <div class="dtme-ft">
+    <div><b>Templates &amp; Site Sets</b><span>Pick from 24 layouts and 11 ready-made site sets, then make them yours.</span></div>
+    <div><b>Edit on the Page</b><span>Click any text, photo or section and change it right where it is.</span></div>
+    <div><b>Motion Effects</b><span>Reveal, hover, popup, parallax and page-transition effects in a few clicks.</span></div>
+    <div><b>PC · Tablet · Mobile</b><span>Adjust each screen size separately so every device looks right.</span></div>
+    <div><b>Pure HTML Export</b><span>Download one HTML file — or a ZIP with media — and host it anywhere.</span></div>
+    <div><b>Free, No Sign-up</b><span>No account, no server. Your work stays in your browser and a work file.</span></div>
+   </div>
+   <p class="dtme-spec">Web · Free · Korean interface · Guide for publishing on GitHub Pages</p>
    <div class="dtme-pay"><code>kangyonz@gmail.com</code></div>
   </div>
  </div>
@@ -631,7 +650,8 @@ function popOpen(id,fromVideo){                         // 카드 보이기(배�
   requestAnimationFrame(function(){o.classList.remove('stage','wait')});
   document.body.style.overflow='hidden';var pop=o.querySelector('.dtme-pop');if(pop)pop.scrollTop=0;
 }
-function popClose(){clearTimeout(stageT);stageNext=null;heroLock=false;
+function popClose(){clearTimeout(stageT);stageNext=null;heroLock=false;heroLayer=null;
+  document.querySelectorAll('.dtme-ov .pop-bg img').forEach(function(i){i.style.animation=''});
   document.querySelectorAll('.hov.on').forEach(function(l){l.classList.remove('on');var v=l.querySelector('video');if(v)v.pause()});
   document.querySelectorAll('.dtme-ov.on').forEach(function(o){o.classList.remove('on','stage','wait','from-video');var v=o.querySelector('.pop-bg video');if(v)setTimeout(function(){v.pause()},700)});
   if(spOv&&spOv.classList.contains('on')){spOv.classList.remove('on','out');spTarget=null;if(spV){spV.pause();spV.classList.remove('cur')}}
@@ -664,10 +684,30 @@ function spStart(id){
   var pr=v.play();if(pr&&pr.catch)pr.catch(function(){});
   v.onended=spFinish;requestAnimationFrame(spWatch);
 }
+function ripple(e,el){                                   // 클릭한 자리(키보드면 요소 가운데)에서 빛이 한 번 퍼짐
+  if(reduced())return;var x=e.clientX,y=e.clientY;
+  if(!x&&!y){var r=el.getBoundingClientRect();x=r.left+r.width/2;y=r.top+r.height/2}
+  var d=document.createElement('span');d.className='ripple';d.style.left=x+'px';d.style.top=y+'px';
+  document.body.appendChild(d);setTimeout(function(){d.remove()},1000);
+}
 function stageGo(){clearTimeout(stageT);var f=stageNext;stageNext=null;if(f)f()}
 var heroLock=false;                                      // 첫 화면 단계 중: 아이콘·배경 움직임 유지(커서가 나가도 끄지 않음)
+var heroLayer=null;
+function syncBg(o,layer){                                // 첫 화면 배경(사진·확대 정도·영상 위치)을 팝업 배경이 그대로 이어받음
+  if(!layer)return;var pb=o.querySelector('.pop-bg');if(!pb)return;
+  var hv=layer.querySelector('video'),pv=pb.querySelector('video');
+  if(hv&&pv){if(pv.dataset.src){pv.src=pv.dataset.src;pv.removeAttribute('data-src')}try{pv.currentTime=hv.currentTime}catch(e){}return}
+  var hi=layer.querySelector('img.cur')||layer.querySelector('img'),pi=pb.querySelector('img');if(!hi||!pi)return;
+  if(hi.currentSrc||hi.src)pi.src=hi.currentSrc||hi.src;
+  var ha=hi.getAnimations?hi.getAnimations()[0]:null;
+  pi.style.animation='none';void pi.offsetWidth;
+  if(ha&&ha.effect){var d=ha.effect.getTiming().duration,t=ha.currentTime||0;
+    pi.style.animation='zin '+(d/1000)+'s linear '+(-t/1000)+'s forwards'}
+  else pi.style.animation='';
+}
 function afterStage(id){                                 // 단계 1 다음: 영상 있으면 배경을 흐리게 깔고 영상, 없으면 바로 카드
   heroLock=false;var o=document.getElementById(id);
+  syncBg(o,heroLayer);heroLayer=null;
   o.classList.remove('go','from-video','stage');
   if(spVideo(id)){o.classList.add('wait','on');bgPlay(o);document.body.style.overflow='hidden';spStart(id)}
   else popOpen(id);
@@ -679,9 +719,10 @@ function appOpen(id,src){                                // 아이콘·목록 �
   var heroIcon=src&&src.closest&&src.closest('#drop')&&scrollY<innerHeight*0.5;
   if(heroIcon){                                          // 첫 화면: 덮개 없이 지금 움직이는 배경·아이콘을 그대로 2초
     heroLock=true;
-    var bg=src.dataset.bg&&document.getElementById(src.dataset.bg);
+    var bg=src.dataset.bg&&document.getElementById(src.dataset.bg);heroLayer=bg||null;
     if(bg&&!bg.classList.contains('on'))src.dispatchEvent(new Event('mouseenter'));   // 터치 기기: 배경 켜기
   }else{                                                 // 목록 등: 배경 화면(움직이는 상태)을 덮개로 2초
+    heroLayer=null;var pi0=o.querySelector('.pop-bg img');if(pi0)pi0.style.animation='';
     o.classList.remove('go','from-video','wait');o.classList.add('stage','on');bgPlay(o);document.body.style.overflow='hidden';
   }
   stageNext=function(){afterStage(id)};
@@ -863,7 +904,7 @@ addEventListener('pageshow',function(e){if(e.persisted){document.querySelectorAl
 
   // DTME 팝업 열기
   document.querySelectorAll('[data-pop]').forEach(function(el){
-    el.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(!stageNext)appOpen(el.dataset.pop,el)});
+    el.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();ripple(e,el);if(!stageNext)appOpen(el.dataset.pop,el)});
     el.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();appOpen(el.dataset.pop,el)}});
     el.addEventListener('mouseenter',function(){spLoad(spVideo(el.dataset.pop))});           // 커서를 올리면 시작 영상 미리 받기
   });
