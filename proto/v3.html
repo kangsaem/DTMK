@@ -352,12 +352,6 @@ body.at-top .dropzone{display:block}
 .dtme-ov .wmw-logo{height:26px;width:auto;display:block}
 .dtme-ov .wm-shot{border-radius:8px;overflow:hidden;box-shadow:0 10px 24px -14px rgba(0,0,0,.5)}
 .dtme-ov .wm-shot img{width:100%;display:block}
-/* 클릭한 자리에서 빛이 한 번 퍼짐 */
-.ripple{position:fixed;z-index:10006;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;pointer-events:none;
-  background:radial-gradient(circle,rgba(255,255,255,.85) 0%,rgba(255,250,235,.45) 35%,rgba(255,255,255,0) 70%);
-  animation:ripple .9s cubic-bezier(.2,.7,.3,1) forwards}
-@keyframes ripple{from{transform:scale(1);opacity:1}to{transform:scale(18);opacity:0}}
-@media (prefers-reduced-motion:reduce){.ripple{display:none}}
 /* Coming soon 작은 창 */
 .soon{position:fixed;left:50%;top:50%;z-index:10005;transform:translate(-50%,-40%);opacity:0;visibility:hidden;pointer-events:none;
   background:rgba(27,42,78,.94);color:#fff;font:600 15px/1 var(--sans);letter-spacing:.06em;padding:18px 28px;border-radius:12px;box-shadow:0 20px 40px -16px rgba(0,0,0,.6);
@@ -684,12 +678,6 @@ function spStart(id){
   var pr=v.play();if(pr&&pr.catch)pr.catch(function(){});
   v.onended=spFinish;requestAnimationFrame(spWatch);
 }
-function ripple(e,el){                                   // 클릭한 자리(키보드면 요소 가운데)에서 빛이 한 번 퍼짐
-  if(reduced())return;var x=e.clientX,y=e.clientY;
-  if(!x&&!y){var r=el.getBoundingClientRect();x=r.left+r.width/2;y=r.top+r.height/2}
-  var d=document.createElement('span');d.className='ripple';d.style.left=x+'px';d.style.top=y+'px';
-  document.body.appendChild(d);setTimeout(function(){d.remove()},1000);
-}
 function stageGo(){clearTimeout(stageT);var f=stageNext;stageNext=null;if(f)f()}
 var heroLock=false;                                      // 첫 화면 단계 중: 아이콘·배경 움직임 유지(커서가 나가도 끄지 않음)
 var heroLayer=null;
@@ -712,21 +700,14 @@ function afterStage(id){                                 // 단계 1 다음: 영
   if(spVideo(id)){o.classList.add('wait','on');bgPlay(o);document.body.style.overflow='hidden';spStart(id)}
   else popOpen(id);
 }
-function appOpen(id,src){                                // 아이콘·목록 클릭 시작점
+function appOpen(id,src){                                // 아이콘·목록 클릭: 지연 없이 바로 영상(있으면) 또는 팝업
   var o=document.getElementById(id);if(!o)return;
   spOv=spOv||document.getElementById('splash');spLoad(spVideo(id));
   if(reduced()){popOpen(id);return}
   var heroIcon=src&&src.closest&&src.closest('#drop')&&scrollY<innerHeight*0.5;
-  if(heroIcon){                                          // 첫 화면: 덮개 없이 지금 움직이는 배경·아이콘을 그대로 2초
-    heroLock=true;
-    var bg=src.dataset.bg&&document.getElementById(src.dataset.bg);heroLayer=bg||null;
-    if(bg&&!bg.classList.contains('on'))src.dispatchEvent(new Event('mouseenter'));   // 터치 기기: 배경 켜기
-  }else{                                                 // 목록 등: 배경 화면(움직이는 상태)을 덮개로 2초
-    heroLayer=null;var pi0=o.querySelector('.pop-bg img');if(pi0)pi0.style.animation='';
-    o.classList.remove('go','from-video','wait');o.classList.add('stage','on');bgPlay(o);document.body.style.overflow='hidden';
-  }
-  stageNext=function(){afterStage(id)};
-  clearTimeout(stageT);stageT=setTimeout(stageGo,STAGE_MS);
+  heroLayer=heroIcon&&src.dataset.bg?document.getElementById(src.dataset.bg):null;
+  if(!heroLayer){var pi0=o.querySelector('.pop-bg img');if(pi0)pi0.style.animation=''}
+  afterStage(id);
 }
 document.addEventListener('click',function(e){if(stageNext&&(heroLock||e.target.closest('.dtme-ov.stage'))){e.stopPropagation();e.preventDefault();stageGo()}},true);
 document.addEventListener('keydown',function(e){if(stageNext&&e.key==='Escape'){e.stopImmediatePropagation();stageGo()}},true);
@@ -904,7 +885,7 @@ addEventListener('pageshow',function(e){if(e.persisted){document.querySelectorAl
 
   // DTME 팝업 열기
   document.querySelectorAll('[data-pop]').forEach(function(el){
-    el.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();ripple(e,el);if(!stageNext)appOpen(el.dataset.pop,el)});
+    el.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(!stageNext)appOpen(el.dataset.pop,el)});
     el.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();appOpen(el.dataset.pop,el)}});
     el.addEventListener('mouseenter',function(){spLoad(spVideo(el.dataset.pop))});           // 커서를 올리면 시작 영상 미리 받기
   });
