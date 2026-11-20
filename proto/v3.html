@@ -276,7 +276,7 @@ body.at-top .dropzone{display:block}
 .dtme-ov .dtme-bd{padding:0 26px 22px}
 .dtme-ov .dtme-pay{border-top:1px solid #e6eaf0;padding-top:14px;display:flex;gap:10px;align-items:center}
 .dtme-ov .dtme-pay code{font:600 15px Consolas,monospace;color:#1b2a4e;background:#f4f7fb;padding:2px 8px;border-radius:4px}
-@media (max-width:560px){.dtme-ov .dtme-hd h2{font-size:24px}}
+
 .dtme-ov{font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif}
 .dtme-ov p{margin:0}
 .dtme-ov .dtme-hd p{margin:6px 0 0}.dtme-ov .dtme-cap{margin:6px 0 0}.dtme-ov .dtme-spec{margin:0 0 18px}
@@ -319,24 +319,52 @@ body.at-top .dropzone{display:block}
 .dtme-ov .mo-vis p{position:absolute;left:0;right:0;bottom:0;margin:0;padding:12px 16px;background:linear-gradient(transparent,rgba(0,0,0,.55));color:#fff;font-size:14px}
 @media (max-width:640px){.dtme-ov .mp-hd b{font-size:11px}.dtme-ov .mp-tabs i{padding:3px 5px;font-size:9px}.dtme-ov .mp-tk{grid-template-columns:repeat(3,1fr)}.dtme-ov .mp-g{grid-template-columns:1fr 1fr}.dtme-ov .mp-g .mp-c:last-child{display:none}}
 .dtme-ov::after{content:'';position:absolute;inset:0;background:rgba(10,16,22,.22)}
-.dtme-ov .dtme-pop{position:relative;z-index:1}
-.dtme-ov .dtme-pop{transform:translateY(-115vh);transition:transform .5s cubic-bezier(.6,0,.85,.2)}
-.dtme-ov.on .dtme-pop{transform:none;transition:transform 1.05s cubic-bezier(.16,1,.3,1)}
+/* ── 팝업 공통 크기: 시작 영상 창과 같은 세로 창(800:1120), 창 안 스크롤, 제목 줄 고정 ── */
+.dtme-ov .dtme-pop{position:relative;z-index:1;width:min(92vw,calc(86vh * 800 / 1120),800px)!important;width:min(92vw,calc(86svh * 800 / 1120),800px)!important;
+  max-width:none!important;aspect-ratio:800/1120;height:auto;max-height:none!important;overflow-y:auto;overscroll-behavior:contain;border-radius:12px!important;
+  box-shadow:0 40px 80px -30px rgba(0,0,0,.7);opacity:0;transform:scale(.96);transition:opacity .45s var(--slow),transform .45s var(--slow)}
+.dtme-ov.on:not(.stage) .dtme-pop{opacity:1;transform:none;transition:opacity .9s var(--slow),transform 1s cubic-bezier(.16,1,.3,1)}
+.dtme-ov.from-video .dtme-pop{transform:none}                      /* 영상 창에서 그 자리로 디졸브 */
+.dtme-ov .dtme-hd{position:sticky;top:0;z-index:3;background:#fff;display:grid;grid-template-columns:1fr auto auto;align-items:center;column-gap:10px;padding:18px 20px 12px!important;border-bottom:1px solid #eef0f3}
+.dtme-ov .dtme-hd h2{grid-column:1;font-size:24px!important}
+.dtme-ov .dtme-hd p{grid-column:1;grid-row:2;margin:4px 0 0!important;font-size:13px!important}
+.dtme-ov .dtme-hd .pop-open{grid-column:2;grid-row:1/3;align-self:center}
+.dtme-ov .dtme-x{position:static!important;grid-column:3;grid-row:1/3;align-self:center}
+.dtme-ov .dtme-bd{padding:16px 20px 22px!important}
+/* 단계 1: 배경만 선명하게(카드 숨김) → 이후 흐려지며 카드 등장 */
+.dtme-ov.stage .pop-bg{filter:none!important}
+.dtme-ov.stage{cursor:pointer}
+.dtme-ov.stage::after{background:transparent!important}
 @media (prefers-reduced-motion:reduce){.dtme-ov .dtme-pop,.dtme-ov.on .dtme-pop{transform:none;transition:none}}
+/* 세로 창에 맞춘 내용 배치 */
+.dtme-ov .dtme-app-m{grid-template-columns:1fr!important}
+.dtme-ov .dtme-app-m>.col:first-child,.dtme-ov .dtme-app-m>.col:last-child{display:none!important}
+.dtme-ov .mp-tk{grid-template-columns:repeat(3,1fr)!important}
+.dtme-ov .mp-g{grid-template-columns:1fr 1fr!important}.dtme-ov .mp-g .mp-c:last-child{display:none}
+.dtme-ov .mp-hd b{font-size:11px}.dtme-ov .mp-tabs i{padding:3px 6px;font-size:9px}
+.dtme-ov .dtme-ft{grid-template-columns:1fr 1fr!important;gap:12px 18px!important;margin:16px 0!important}
+.dtme-ov .dt-shots{padding:12px!important;gap:10px!important}
+.dtme-ov .dtme-app .r{flex-wrap:wrap;row-gap:3px}.dtme-ov .dtme-app .cutrow{justify-content:flex-start!important}
+.dtme-ov .dtme-app .cutrow .k[style*=margin-left]{margin-left:0!important}
+/* Coming soon 작은 창 */
+.soon{position:fixed;left:50%;top:50%;z-index:10005;transform:translate(-50%,-40%);opacity:0;visibility:hidden;pointer-events:none;
+  background:rgba(27,42,78,.94);color:#fff;font:600 15px/1 var(--sans);letter-spacing:.06em;padding:18px 28px;border-radius:12px;box-shadow:0 20px 40px -16px rgba(0,0,0,.6);
+  transition:opacity .35s var(--slow),transform .35s var(--slow),visibility 0s linear .35s}
+.soon.on{opacity:1;visibility:visible;transform:translate(-50%,-50%);pointer-events:auto;transition:opacity .35s var(--slow),transform .35s var(--slow),visibility 0s}
 /* 영문은 글자가 길어 편집 창 글자를 조금 줄임 */
 .dtme-ov .dtme-app{font-size:9px}
 .dtme-ov .dtme-app .k{padding:3px 4px}
 .dtme-ov .dtme-app .tc{font-size:10px;padding:1px 4px}
 .dtme-ov .dtme-app .sl span{width:50px}
 /* 앱 시작 영상: 배경 흐림 + 가운데 세로 영상, 끝나면 팝업 */
-.sp-ov{position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;visibility:hidden;opacity:0;
+.sp-ov{position:fixed;inset:0;z-index:10001;display:flex;align-items:center;justify-content:center;visibility:hidden;opacity:0;
   background:rgba(14,20,28,.32);-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);cursor:pointer;
   transition:opacity .5s var(--slow),-webkit-backdrop-filter .6s var(--slow),backdrop-filter .6s var(--slow),visibility 0s linear .6s}
 .sp-ov.on{visibility:visible;opacity:1;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:opacity .45s var(--slow),-webkit-backdrop-filter .6s var(--slow),backdrop-filter .6s var(--slow),visibility 0s}
 .sp-box{position:relative;width:min(92vw,calc(86vh * 800 / 1120),800px);width:min(92vw,calc(86svh * 800 / 1120),800px);aspect-ratio:800/1120;border-radius:12px;overflow:hidden;background:#222;
   box-shadow:0 40px 80px -30px rgba(0,0,0,.7);transform:scale(.96);transition:transform .7s cubic-bezier(.16,1,.3,1)}
 .sp-ov.on .sp-box{transform:none}
-.sp-ov.on.out{z-index:10000;opacity:0;pointer-events:none;transition:opacity 1s linear,visibility 0s}   /* 마지막 1초: 팝업 위에서 디졸브로 사라짐 */
+.sp-ov.on.out{z-index:10002;opacity:0;pointer-events:none;transition:opacity 1s linear,visibility 0s}   /* 마지막 1초: 팝업 위에서 디졸브로 사라짐 */
 .sp-box video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
 .sp-box video.cur{display:block}
 /* 앱 목록에서 누를 수 있는 줄 */
@@ -424,6 +452,7 @@ body.at-top .dropzone{display:block}
   </div>
 </footer>
 
+<div class="soon" id="soon" role="status" aria-live="polite">Coming soon</div>
 <!-- ===== 앱 시작 영상 (DTME·DTMC·MOSCO) ===== -->
 <div class="sp-ov" id="splash" aria-hidden="true">
  <div class="sp-box">
@@ -433,10 +462,10 @@ body.at-top .dropzone{display:block}
  </div>
 </div>
 <!-- ===== 앱 팝업 (머니파이·DTMD·DTMC·MOSCO + DTME) ===== -->
-<div class="dtme-ov" id="popMoney" onclick="if(event.target===this)popClose()">
- <div class="pop-bg"><img src="v3/money3.webp" alt="" loading="lazy"></div>
+<div class="dtme-ov" id="popMoney" onclick="if(!event.target.closest('.dtme-pop')&&!this.classList.contains('stage'))popClose()">
+ <div class="pop-bg"><img src="v3/money2.webp" alt=""></div>
  <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="popMoneyT">
-  <div class="dtme-hd"><h2 id="popMoneyT">MONEY PIE</h2><p>Portfolio &amp; Allocation Tracker</p><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
+  <div class="dtme-hd"><h2 id="popMoneyT">MONEY PIE</h2><p>Portfolio &amp; Allocation Tracker</p><a class="pop-open" href="https://money.kangyonz.com/" onclick="popGo(this,event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
   <div class="dtme-bd">
    <div class="mp-app" aria-label="Money Pie screen (sample data)">
  <div class="mp-tk"><div><span>KOSPI</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#e86a8e" stroke-width="1.4" points="0,14 10,12 20,13 30,9 40,10 50,6 60,5"/></svg></div><div><span>NASDAQ</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#e86a8e" stroke-width="1.4" points="0,15 10,13 20,11 30,12 40,8 50,7 60,4"/></svg></div><div><span>S&amp;P 500</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#e86a8e" stroke-width="1.4" points="0,13 10,12 20,12 30,9 40,9 50,7 60,6"/></svg></div><div><span>US 10Y</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#5bb8e0" stroke-width="1.4" points="0,6 10,7 20,9 30,8 40,11 50,12 60,13"/></svg></div><div><span>USD/KRW</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#e86a8e" stroke-width="1.4" points="0,12 10,11 20,12 30,10 40,8 50,9 60,7"/></svg></div><div><span>Gold</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#e86a8e" stroke-width="1.4" points="0,15 10,14 20,12 30,11 40,8 50,6 60,3"/></svg></div></div>
@@ -446,46 +475,46 @@ body.at-top .dropzone{display:block}
 </div>
    <div class="dtme-ft"><div><b>All Accounts, One View</b><span>Pension savings, IRP, ISA and brokerage accounts from different brokers in one place.</span></div><div><b>Allocation at a Glance</b><span>See your mix by sector, region and account type.</span></div><div><b>Monthly History</b><span>Save your assets each month and follow the trend.</span></div><div><b>Logic V1 Signals</b><span>Rule-based buy and sell notes that help curb emotional trading.</span></div><div><b>Watchlist</b><span>Keep an eye on the stocks you are considering.</span></div><div><b>Private by Design</b><span>No login, no broker linking. Your data stays in your browser.</span></div></div>
    <p class="dtme-spec">Web · Free · Korean interface · Excel &amp; JSON backup</p>
-   <div class="dtme-pay"><code>kangyonz@gmail.com</code><a class="pop-open" href="https://money.kangyonz.com/" onclick="popGo(this,event)">Open ↗</a></div>
+   <div class="dtme-pay"><code>kangyonz@gmail.com</code></div>
   </div>
  </div>
 </div>
-<div class="dtme-ov" id="popDtmd" onclick="if(event.target===this)popClose()">
+<div class="dtme-ov" id="popDtmd" onclick="if(!event.target.closest('.dtme-pop')&&!this.classList.contains('stage'))popClose()">
  <div class="pop-bg"><video data-src="v3/fish.mp4" poster="v3/fish-poster.jpg" muted loop playsinline preload="none"></video></div>
  <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="popDtmdT">
-  <div class="dtme-hd"><h2 id="popDtmdT">DTMD</h2><p>Don’t Touch Maximum Depth — Dive Planner &amp; Logbook</p><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
+  <div class="dtme-hd"><h2 id="popDtmdT">DTMD</h2><p>Don’t Touch Maximum Depth — Dive Planner &amp; Logbook</p><a class="pop-open" href="https://scuba.kangyonz.com/" onclick="popGo(this,event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
   <div class="dtme-bd">
    <div class="dt-shots"><img src="v3/dtmd-shot1.webp" alt="DTMD planner screen" loading="lazy"><img src="v3/dtmd-shot2.webp" alt="DTMD logbook screen" loading="lazy"></div>
    <div class="dtme-ft"><div><b>Dive Planner</b><span>Draw a depth profile and see the no-deco limit, ceiling and a suggested ascent.</span></div><div><b>3-Minute Tutorial</b><span>A voice-guided lesson on no-deco and deco basics.</span></div><div><b>Logbook Import</b><span>Reads FIT, UDDF and Suunto JSON from Garmin, Suunto, Amazfit and more.</span></div><div><b>Depth Graph &amp; Map</b><span>Replay each dive with entry and exit points on the map.</span></div><div><b>Photos &amp; Notes</b><span>Keep photos and memos with every dive.</span></div><div><b>9 Languages</b><span>English, Korean, Japanese, Chinese (Simplified &amp; Traditional), German, Spanish, French and Italian.</span></div></div>
    <p class="dtme-spec">Web app · iPhone, Android &amp; PC · Add to Home Screen · Logs stay on your device</p>
-   <div class="dtme-pay"><code>kangyonz@gmail.com</code><a class="pop-open" href="https://scuba.kangyonz.com/" onclick="popGo(this,event)">Open ↗</a></div>
+   <div class="dtme-pay"><code>kangyonz@gmail.com</code></div>
   </div>
  </div>
 </div>
-<div class="dtme-ov" id="popDtmc" onclick="if(event.target===this)popClose()">
- <div class="pop-bg"><img src="v3/dtmc-bg.webp" alt="" loading="lazy"></div>
+<div class="dtme-ov" id="popDtmc" onclick="if(!event.target.closest('.dtme-pop')&&!this.classList.contains('stage'))popClose()">
+ <div class="pop-bg"><img src="v3/dtmc-bg.webp" alt=""></div>
  <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="popDtmcT">
-  <div class="dtme-hd"><h2 id="popDtmcT">DTMC</h2><p>Desktop Music Composer</p><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
+  <div class="dtme-hd"><h2 id="popDtmcT">DTMC</h2><p>Desktop Music Composer</p><a class="pop-open" href="#" onclick="popSoon(event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
   <div class="dtme-bd">
    <div class="mo-vis"><img src="v3/dtmc-bg.webp" alt="" loading="lazy"><p>Details coming soon.</p></div>
    <div class="dtme-pay"><code>kangyonz@gmail.com</code></div>
   </div>
  </div>
 </div>
-<div class="dtme-ov" id="popWeb" onclick="if(event.target===this)popClose()">
- <div class="pop-bg"><img src="v3/web-bg.webp" alt="" loading="lazy"></div>
+<div class="dtme-ov" id="popWeb" onclick="if(!event.target.closest('.dtme-pop')&&!this.classList.contains('stage'))popClose()">
+ <div class="pop-bg"><img src="v3/web-bg.webp" alt=""></div>
  <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="popWebT">
-  <div class="dtme-hd"><h2 id="popWebT">WEB EDITOR</h2><p>Website Editor</p><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
+  <div class="dtme-hd"><h2 id="popWebT">WEB EDITOR</h2><p>Website Editor</p><a class="pop-open" href="#" onclick="popSoon(event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
   <div class="dtme-bd">
    <div class="mo-vis" style="background:#f4f2ee;display:grid;place-items:center;aspect-ratio:16/9"><img src="v3/web-line.png?v=1" alt="" loading="lazy" style="width:28%;aspect-ratio:1;border-radius:22%;position:static"><p>Details coming soon.</p></div>
    <div class="dtme-pay"><code>kangyonz@gmail.com</code></div>
   </div>
  </div>
 </div>
-<div class="dtme-ov" id="popMosco" onclick="if(event.target===this)popClose()">
- <div class="pop-bg"><img src="v3/mosco-bg.webp" alt="" loading="lazy"></div>
+<div class="dtme-ov" id="popMosco" onclick="if(!event.target.closest('.dtme-pop')&&!this.classList.contains('stage'))popClose()">
+ <div class="pop-bg"><img src="v3/mosco-bg.webp" alt=""></div>
  <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="popMoscoT">
-  <div class="dtme-hd"><h2 id="popMoscoT">MOSCO</h2><p>Photo Touch-up</p><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
+  <div class="dtme-hd"><h2 id="popMoscoT">MOSCO</h2><p>Photo Touch-up</p><a class="pop-open" href="#" onclick="popSoon(event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
   <div class="dtme-bd">
    <div class="mo-vis"><img src="v3/mosco-bg.webp" alt="" loading="lazy"><p>Details coming soon.</p></div>
    
@@ -495,13 +524,13 @@ body.at-top .dropzone{display:block}
  </div>
 </div>
 <!-- ===== DTME 팝업 ===== -->
-<div class="dtme-ov" id="dtmeOv" onclick="if(event.target===this)popClose()">
- <div class="pop-bg"><img src="v3/dtme-bg.webp?v=3" alt="" loading="lazy"></div>
+<div class="dtme-ov" id="dtmeOv" onclick="if(!event.target.closest('.dtme-pop')&&!this.classList.contains('stage'))popClose()">
+ <div class="pop-bg"><img src="v3/dtme-bg.webp?v=3" alt=""></div>
  <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="dtmeTitle">
   <div class="dtme-hd">
    <h2 id="dtmeTitle">DTME</h2>
    <p>Diving Tour Movie Editor</p>
-   <button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button>
+   <a class="pop-open" href="#" onclick="popSoon(event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button>
   </div>
   <div class="dtme-bd">
 
@@ -590,36 +619,59 @@ body.at-top .dropzone{display:block}
  </div>
 </div>
 <script>
-/* 앱 팝업 공통: 열기·닫기·[Open ↗]으로 사라지며 이동 */
-function popOpen(id){var o=document.getElementById(id);if(!o)return;o.classList.remove('go');o.classList.add('on');document.body.style.overflow='hidden';
-  var v=o.querySelector('.pop-bg video');if(v){if(v.dataset.src){v.src=v.dataset.src;v.removeAttribute('data-src')}var pr=v.play();if(pr&&pr.catch)pr.catch(function(){})}}
-function popClose(){document.querySelectorAll('.dtme-ov.on').forEach(function(o){o.classList.remove('on');var v=o.querySelector('.pop-bg video');if(v)setTimeout(function(){v.pause()},700)});document.body.style.overflow='';}
-function dtmeOpen(){popOpen('dtmeOv')}function dtmeClose(){popClose()}
-function popGo(a,e){e.preventDefault();var o=a.closest('.dtme-ov');o.classList.add('go');setTimeout(function(){location.href=a.href},650)}
+/* 앱 팝업 공통 흐름: ① 배경 2초(선명) → ② 시작 영상(있으면) → ③ 같은 크기 팝업. 클릭·Esc로 단계 건너뛰기 */
+var STAGE_MS=2000,stageT=null,stageNext=null;
+function reduced(){return matchMedia('(prefers-reduced-motion: reduce)').matches}
+function bgPlay(o){var v=o.querySelector('.pop-bg video');if(v){if(v.dataset.src){v.src=v.dataset.src;v.removeAttribute('data-src')}var pr=v.play();if(pr&&pr.catch)pr.catch(function(){})}}
+function popOpen(id,fromVideo){                         // 카드 보이기(배경은 흐려짐)
+  var o=document.getElementById(id);if(!o)return;
+  o.classList.remove('go');o.classList.toggle('from-video',!!fromVideo);o.classList.add('on');bgPlay(o);
+  requestAnimationFrame(function(){o.classList.remove('stage')});
+  document.body.style.overflow='hidden';var pop=o.querySelector('.dtme-pop');if(pop)pop.scrollTop=0;
+}
+function popClose(){clearTimeout(stageT);stageNext=null;
+  document.querySelectorAll('.dtme-ov.on').forEach(function(o){o.classList.remove('on','stage','from-video');var v=o.querySelector('.pop-bg video');if(v)setTimeout(function(){v.pause()},700)});
+  if(spOv&&spOv.classList.contains('on')){spOv.classList.remove('on','out');spTarget=null;if(spV){spV.pause();spV.classList.remove('cur')}}
+  document.body.style.overflow='';}
+function dtmeOpen(){appOpen('dtmeOv')}function dtmeClose(){popClose()}
+function popGo(a,e){e.preventDefault();e.stopPropagation();var o=a.closest('.dtme-ov');o.classList.add('go');setTimeout(function(){location.href=a.href},650)}
+var soonT=null;
+function popSoon(e){if(e){e.preventDefault();e.stopPropagation()}var b=document.getElementById('soon');b.classList.add('on');clearTimeout(soonT);soonT=setTimeout(function(){b.classList.remove('on')},1500)}
+document.addEventListener('click',function(e){var b=document.getElementById('soon');if(b&&b.classList.contains('on')&&!e.target.closest('.pop-open')){b.classList.remove('on')}},true);
 
-/* 시작 영상: 있으면 재생 후 팝업, 화면 클릭·Esc로 바로 팝업 */
+/* 시작 영상 */
 var spOv=null,spV=null,spTarget=null;
 function spVideo(id){return document.querySelector('#splash video[data-app="'+id+'"]')}
 function spLoad(v){if(v&&v.dataset.src){v.src=v.dataset.src;v.removeAttribute('data-src');v.preload='auto'}}
-function spFinish(){                                    // 팝업을 내리고, 영상은 1초 동안 디졸브로 사라짐
-  if(!spTarget)return;var t=spTarget,v=spV;spTarget=null;popOpen(t);spOv.classList.add('out');
+function spFinish(){                                    // 영상 끝나기 직전: 그 자리에서 팝업으로 디졸브
+  if(!spTarget)return;var t=spTarget,v=spV;spTarget=null;popOpen(t,true);spOv.classList.add('out');
   setTimeout(function(){spOv.classList.remove('on','out');spOv.setAttribute('aria-hidden','true');if(v){v.pause();v.classList.remove('cur')}},1050)}
-function spWatch(){                                      // 끝나기 1초 전을 매 프레임 확인
+function spWatch(){
   if(!spTarget||!spV)return;var d=spV.duration;
-  var lead=parseFloat(spV.dataset.lead||'1');            // 디졸브 시작: 끝나기 lead초 전 (DTMC는 움직임이 일찍 잦아들어 1.6초)
+  var lead=parseFloat(spV.dataset.lead||'1');            // 디졸브 시작: 끝나기 lead초 전 (DTMC 1.6초)
   if(d&&isFinite(d)&&spV.currentTime>=d-lead){spFinish();return}
   requestAnimationFrame(spWatch)}
-function appOpen(id){
+function spStart(id){
   spOv=spOv||document.getElementById('splash');var v=spVideo(id);
-  if(!v||matchMedia('(prefers-reduced-motion: reduce)').matches){popOpen(id);return}
+  if(!v){popOpen(id);return}
   spLoad(v);spV=v;spTarget=id;
   document.querySelectorAll('#splash video').forEach(function(x){x.classList.toggle('cur',x===v)});
   try{v.currentTime=0}catch(e){}
-  spOv.classList.add('on');spOv.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
-  spOv.classList.remove('out');
+  spOv.classList.remove('out');spOv.classList.add('on');spOv.setAttribute('aria-hidden','false');
   var pr=v.play();if(pr&&pr.catch)pr.catch(function(){});
   v.onended=spFinish;requestAnimationFrame(spWatch);
 }
+function stageGo(){clearTimeout(stageT);var f=stageNext;stageNext=null;if(f)f()}
+function appOpen(id){                                    // 아이콘·목록 클릭 시작점
+  var o=document.getElementById(id);if(!o)return;
+  spOv=spOv||document.getElementById('splash');spLoad(spVideo(id));
+  if(reduced()){popOpen(id);return}
+  o.classList.remove('go','from-video');o.classList.add('stage','on');bgPlay(o);document.body.style.overflow='hidden';
+  stageNext=function(){spStart(id)};
+  clearTimeout(stageT);stageT=setTimeout(stageGo,STAGE_MS);
+}
+document.addEventListener('click',function(e){if(stageNext&&e.target.closest('.dtme-ov.stage')){e.stopPropagation();stageGo()}},true);
+document.addEventListener('keydown',function(e){if(stageNext&&e.key==='Escape'){e.stopImmediatePropagation();stageGo()}},true);
 document.addEventListener('click',function(e){if(spTarget&&e.target.closest('#splash'))spFinish()});
 document.addEventListener('keydown',function(e){if(spTarget&&e.key==='Escape'){e.stopImmediatePropagation();spFinish()}},true);
 document.addEventListener('keydown',function(e){if(e.key==='Escape')popClose();});
