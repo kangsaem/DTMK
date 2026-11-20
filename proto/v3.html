@@ -167,7 +167,8 @@ body.at-top .dropzone{display:block}
 
 .drop.on{pointer-events:auto}
 .drop.on>*{transform:none;transition:transform 1.1s cubic-bezier(.16,1,.3,1)}
-.drop.on>*:nth-child(2){transition-delay:.08s}.drop.on>*:nth-child(3){transition-delay:.16s}.drop.on>*:nth-child(4){transition-delay:.24s}
+.drop>*{transition-delay:0s!important}
+.drop.on>*{transition-delay:var(--dd,0s)!important}   /* 바깥쪽 아이콘부터 내려옴(JS가 --dd 지정) */
 .drop a:hover{transform:translateY(-4px)}
 @media (max-width:640px){.drop{gap:14px;top:calc(72px + env(safe-area-inset-top))}.drop>*{width:52px;height:52px;border-radius:12px}}
 @media (prefers-reduced-motion:reduce){.drop>*,.drop.on>*{transition:none}}
@@ -358,12 +359,12 @@ body.at-top .dropzone{display:block}
 <!-- 첫 화면: 상단 가운데에 마우스를 올리거나 화면을 터치하면 앱 아이콘이 위에서 내려옴 -->
 <div class="dropzone" id="dz" aria-hidden="true"></div>
 <nav class="drop" id="drop" aria-label="Apps">
+  <span data-label="Used to make pages" data-pop="popWeb" role="button" tabindex="0"><img src="v3/web-line.png?v=1" alt="Used to make pages"></span>
   <span data-label="Used to read numbers" data-bg="hov-money" data-pop="popMoney" role="button" tabindex="0"><img src="v3/moneypie-line.png?v=4" alt="Used to read numbers"></span>
   <span data-label="Used at sea" data-bg="hov-dtmd" data-pop="popDtmd" role="button" tabindex="0"><img src="v3/dtmd-line.png?v=4" alt="Used at sea"></span>
   <span data-label="Used back on land" data-bg="hov-dtme" data-pop="dtmeOv" role="button" tabindex="0"><img src="v3/dtme-line.png?v=4" alt="Used back on land"></span>
   <span data-label="Used to compose" data-bg="hov-dtmc" data-pop="popDtmc" role="button" tabindex="0"><img src="v3/dtmc-line.png?v=4" alt="Used to compose"></span>
   <span data-label="Used to touch up" data-bg="hov-mosco" data-pop="popMosco" role="button" tabindex="0"><img src="v3/mosco-line.png?v=4" alt="Used to touch up"></span>
-  <span data-label="Used to build pages" data-pop="popWeb" role="button" tabindex="0"><img src="v3/web-line.png?v=1" alt="Used to build pages"></span>
 </nav>
 <div class="drop-lbl" id="dropLbl" aria-hidden="true"><span></span><span></span></div>
 
@@ -396,6 +397,8 @@ body.at-top .dropzone{display:block}
 <section class="blk panel sheet" id="apps"><div class="w" data-speed="1.35">
   <h2 class="reveal">Apps</h2>
   <ul class="apps">
+    <li class="app reveal"><button class="row" type="button" data-pop="popWeb"><div class="ic"><img src="v3/web-line.png?v=1" alt="" loading="lazy"></div>
+      <div><p class="nm">Used to make pages</p></div><span class="ar">→</span></button></li>
     <li class="app reveal"><button class="row" type="button" data-pop="popMoney"><div class="ic"><img src="v3/moneypie-line.png?v=4" alt="" loading="lazy"></div>
       <div><p class="nm">Used to read numbers</p></div><span class="ar">→</span></button></li>
     <li class="app reveal"><button class="row" type="button" data-pop="popDtmd"><div class="ic"><img src="v3/dtmd-line.png?v=4" alt="" loading="lazy"></div>
@@ -406,8 +409,6 @@ body.at-top .dropzone{display:block}
       <div><p class="nm">Used to compose</p></div><span class="ar">→</span></button></li>
     <li class="app reveal"><button class="row" type="button" data-pop="popMosco"><div class="ic"><img src="v3/mosco-line.png?v=4" alt="" loading="lazy"></div>
       <div><p class="nm">Used to touch up</p></div><span class="ar">→</span></button></li>
-    <li class="app reveal"><button class="row" type="button" data-pop="popWeb"><div class="ic"><img src="v3/web-line.png?v=1" alt="" loading="lazy"></div>
-      <div><p class="nm">Used to build pages</p></div><span class="ar">→</span></button></li>
   </ul>
 </div></section>
 
@@ -760,6 +761,8 @@ addEventListener('pageshow',function(e){if(e.persisted){document.querySelectorAl
       if(v)setTimeout(function(){if(!layer.classList.contains('on'))v.pause()},1300);
     });
   });
+  // 내려오는 순서: 양 끝(바깥쪽)부터 안쪽으로 0.1초씩
+  (function(){var k=drop.children,n=k.length;for(var i=0;i<n;i++)k[i].style.setProperty('--dd',(Math.min(i,n-1-i)*0.1)+'s')})();
   // 아이콘 줄 아래 큰 설명 글자
   var lbl=document.getElementById('dropLbl'),lsp=lbl.querySelectorAll('span'),lk=0,lblT=null;
   function placeLbl(){var r=drop.getBoundingClientRect();lbl.style.top=(r.bottom+22)+'px';lbl.style.width=r.width+'px'}
