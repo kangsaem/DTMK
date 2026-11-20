@@ -333,6 +333,8 @@ body.at-top .dropzone{display:block}
 .dtme-ov .dtme-bd{padding:16px 20px 22px!important}
 /* 단계 1: 배경만 선명하게(카드 숨김) → 이후 흐려지며 카드 등장 */
 .dtme-ov.stage .pop-bg{filter:none!important}
+.dtme-ov.wait .dtme-pop{opacity:0!important;transition:none!important}      /* 시작 영상 재생 중: 배경만 흐리게, 카드는 대기 */
+.dtme-ov.on .pop-bg img{animation:zin 14s linear forwards}                /* 팝업 배경도 천천히 줌인(멈춘 화면 방지) */
 .dtme-ov.stage{cursor:pointer}
 .dtme-ov.stage::after{background:transparent!important}
 @media (prefers-reduced-motion:reduce){.dtme-ov .dtme-pop,.dtme-ov.on .dtme-pop{transform:none;transition:none}}
@@ -626,11 +628,12 @@ function bgPlay(o){var v=o.querySelector('.pop-bg video');if(v){if(v.dataset.src
 function popOpen(id,fromVideo){                         // 카드 보이기(배경은 흐려짐)
   var o=document.getElementById(id);if(!o)return;
   o.classList.remove('go');o.classList.toggle('from-video',!!fromVideo);o.classList.add('on');bgPlay(o);
-  requestAnimationFrame(function(){o.classList.remove('stage')});
+  requestAnimationFrame(function(){o.classList.remove('stage','wait')});
   document.body.style.overflow='hidden';var pop=o.querySelector('.dtme-pop');if(pop)pop.scrollTop=0;
 }
-function popClose(){clearTimeout(stageT);stageNext=null;
-  document.querySelectorAll('.dtme-ov.on').forEach(function(o){o.classList.remove('on','stage','from-video');var v=o.querySelector('.pop-bg video');if(v)setTimeout(function(){v.pause()},700)});
+function popClose(){clearTimeout(stageT);stageNext=null;heroLock=false;
+  document.querySelectorAll('.hov.on').forEach(function(l){l.classList.remove('on');var v=l.querySelector('video');if(v)v.pause()});
+  document.querySelectorAll('.dtme-ov.on').forEach(function(o){o.classList.remove('on','stage','wait','from-video');var v=o.querySelector('.pop-bg video');if(v)setTimeout(function(){v.pause()},700)});
   if(spOv&&spOv.classList.contains('on')){spOv.classList.remove('on','out');spTarget=null;if(spV){spV.pause();spV.classList.remove('cur')}}
   document.body.style.overflow='';}
 function dtmeOpen(){appOpen('dtmeOv')}function dtmeClose(){popClose()}
@@ -662,15 +665,29 @@ function spStart(id){
   v.onended=spFinish;requestAnimationFrame(spWatch);
 }
 function stageGo(){clearTimeout(stageT);var f=stageNext;stageNext=null;if(f)f()}
-function appOpen(id){                                    // 아이콘·목록 클릭 시작점
+var heroLock=false;                                      // 첫 화면 단계 중: 아이콘·배경 움직임 유지(커서가 나가도 끄지 않음)
+function afterStage(id){                                 // 단계 1 다음: 영상 있으면 배경을 흐리게 깔고 영상, 없으면 바로 카드
+  heroLock=false;var o=document.getElementById(id);
+  o.classList.remove('go','from-video','stage');
+  if(spVideo(id)){o.classList.add('wait','on');bgPlay(o);document.body.style.overflow='hidden';spStart(id)}
+  else popOpen(id);
+}
+function appOpen(id,src){                                // 아이콘·목록 클릭 시작점
   var o=document.getElementById(id);if(!o)return;
   spOv=spOv||document.getElementById('splash');spLoad(spVideo(id));
   if(reduced()){popOpen(id);return}
-  o.classList.remove('go','from-video');o.classList.add('stage','on');bgPlay(o);document.body.style.overflow='hidden';
-  stageNext=function(){spStart(id)};
+  var heroIcon=src&&src.closest&&src.closest('#drop')&&scrollY<innerHeight*0.5;
+  if(heroIcon){                                          // 첫 화면: 덮개 없이 지금 움직이는 배경·아이콘을 그대로 2초
+    heroLock=true;
+    var bg=src.dataset.bg&&document.getElementById(src.dataset.bg);
+    if(bg&&!bg.classList.contains('on'))src.dispatchEvent(new Event('mouseenter'));   // 터치 기기: 배경 켜기
+  }else{                                                 // 목록 등: 배경 화면(움직이는 상태)을 덮개로 2초
+    o.classList.remove('go','from-video','wait');o.classList.add('stage','on');bgPlay(o);document.body.style.overflow='hidden';
+  }
+  stageNext=function(){afterStage(id)};
   clearTimeout(stageT);stageT=setTimeout(stageGo,STAGE_MS);
 }
-document.addEventListener('click',function(e){if(stageNext&&e.target.closest('.dtme-ov.stage')){e.stopPropagation();stageGo()}},true);
+document.addEventListener('click',function(e){if(stageNext&&(heroLock||e.target.closest('.dtme-ov.stage'))){e.stopPropagation();e.preventDefault();stageGo()}},true);
 document.addEventListener('keydown',function(e){if(stageNext&&e.key==='Escape'){e.stopImmediatePropagation();stageGo()}},true);
 document.addEventListener('click',function(e){if(spTarget&&e.target.closest('#splash'))spFinish()});
 document.addEventListener('keydown',function(e){if(spTarget&&e.key==='Escape'){e.stopImmediatePropagation();spFinish()}},true);
@@ -782,7 +799,7 @@ addEventListener('pageshow',function(e){if(e.persisted){document.querySelectorAl
   function atTop(){return scrollY<innerHeight*0.5}
   function showDrop(auto){clearTimeout(hideT);if(!atTop())return;drop.classList.add('on');if(auto)hideT=setTimeout(hideDrop,6000)}
   function hideDrop(){clearTimeout(hideT);drop.classList.remove('on')}
-  function laterHide(){clearTimeout(hideT);hideT=setTimeout(hideDrop,700)}
+  function laterHide(){clearTimeout(hideT);hideT=setTimeout(function(){if(!heroLock)hideDrop()},700)}
   dz.addEventListener('mouseenter',function(){showDrop(false)});
   dz.addEventListener('mouseleave',laterHide);
   drop.addEventListener('mouseenter',function(){clearTimeout(hideT)});
@@ -809,6 +826,7 @@ addEventListener('pageshow',function(e){if(e.persisted){document.querySelectorAl
       if(v&&!still){if(v.dataset.src){v.src=v.dataset.src;v.removeAttribute('data-src')}var pr=v.play();if(pr&&pr.catch)pr.catch(function(){})}
     });
     a.addEventListener('mouseleave',function(){
+      if(heroLock)return;
       layer.classList.remove('on');clearTimeout(seqT);clearTimeout(preT);
       setTimeout(function(){if(!layer.classList.contains('on'))imgs.forEach(function(im){im.classList.remove('cur','run')});curK=-1},1300);
       if(v)setTimeout(function(){if(!layer.classList.contains('on'))v.pause()},1300);
@@ -831,7 +849,7 @@ addEventListener('pageshow',function(e){if(e.persisted){document.querySelectorAl
     var cur=lsp[lk];if(cur.classList.contains('on')&&cur.textContent===text)return;
     var nx=lsp[1-lk];fit(nx,text);cur.classList.remove('on');nx.classList.add('on');lk=1-lk;
   }
-  function hideLbl(){lblT=setTimeout(function(){lsp[0].classList.remove('on');lsp[1].classList.remove('on')},120)}
+  function hideLbl(){lblT=setTimeout(function(){if(heroLock)return;lsp[0].classList.remove('on');lsp[1].classList.remove('on')},120)}
   [].forEach.call(drop.children,function(el){
     el.addEventListener('mouseenter',function(){if(drop.classList.contains('on'))showLbl(el.dataset.label)});
     el.addEventListener('mouseleave',hideLbl);
@@ -845,8 +863,8 @@ addEventListener('pageshow',function(e){if(e.persisted){document.querySelectorAl
 
   // DTME 팝업 열기
   document.querySelectorAll('[data-pop]').forEach(function(el){
-    el.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();appOpen(el.dataset.pop)});
-    el.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();appOpen(el.dataset.pop)}});
+    el.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(!stageNext)appOpen(el.dataset.pop,el)});
+    el.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();appOpen(el.dataset.pop,el)}});
     el.addEventListener('mouseenter',function(){spLoad(spVideo(el.dataset.pop))});           // 커서를 올리면 시작 영상 미리 받기
   });
   function anyPop(){return !!document.querySelector('.dtme-ov.on,.sp-ov.on')}
