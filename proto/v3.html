@@ -73,7 +73,7 @@ img{display:block;max-width:100%}
 .hov img,.hov video{width:100%;height:100%;object-fit:cover;display:block}
 .hov img{transform:scale(1)}
 .hov.on:not(.seq) img{animation:zin 9s linear forwards}            /* 한 장: 커서를 올린 동안 천천히 줌인 */
-.hov.seq img{position:absolute;inset:0;opacity:0;transition:opacity 1.4s var(--slow)}
+.hov.seq img{position:absolute;inset:0;opacity:0;transition:opacity 1s var(--slow)}   /* 3초 보이고 1초 디졸브 (4초 간격) */
 .hov.seq img.cur{opacity:1}
 .hov.seq img.run{animation:zin 7.5s linear forwards}       /* 여러 장: 차례로 줌인하며 겹쳐 바뀜 */
 @keyframes zin{from{transform:scale(1)}to{transform:scale(1.15)}}
