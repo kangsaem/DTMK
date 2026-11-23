@@ -382,6 +382,13 @@ body.at-top .dropzone{display:block}
 .app button.row:hover{padding-left:10px}
 .app button.row:hover .ar{transform:translateX(6px)}
 .drop [data-pop]{cursor:pointer}
+/* 팝업 핵심 3줄 + 한계 한 줄 (2026-11-23) */
+.dtme-ov .pop-pts{padding:18px 4px 16px;margin:0 0 16px;border-bottom:1px solid #eef0f3}
+.dtme-ov .pop-pts ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.dtme-ov .pop-pts li{position:relative;padding-left:18px;font:600 17px/1.35 "Segoe UI",system-ui,sans-serif;color:#1f2a3c}
+.dtme-ov .pop-pts li::before{content:"";position:absolute;left:2px;top:.55em;width:7px;height:7px;border-radius:50%;background:#4a5c6e}
+.dtme-ov .pop-pts p{margin:12px 0 0;padding-left:18px;font-size:13px;color:#8a93a3}
+@media (max-width:560px){.dtme-ov .pop-pts li{font-size:15px}}
 </style>
 </head>
 <body>
@@ -476,8 +483,9 @@ body.at-top .dropzone{display:block}
 <div class="dtme-ov" id="popMoney" onclick="if(!event.target.closest('.dtme-pop')&&!this.classList.contains('stage'))popClose()">
  <div class="pop-bg"><img src="v3/money2.webp" alt=""></div>
  <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="popMoneyT">
-  <div class="dtme-hd"><h2 id="popMoneyT">MONEY PIE</h2><p>Portfolio &amp; Allocation Tracker</p><a class="pop-open" href="https://money.kangyonz.com/" onclick="popGo(this,event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
+  <div class="dtme-hd"><h2 id="popMoneyT">MONEY PIE</h2><p>Portfolio Tracker</p><a class="pop-open" href="https://money.kangyonz.com/" onclick="popGo(this,event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
   <div class="dtme-bd">
+   <div class="pop-pts"><ul><li>No login. No broker link</li><li>Every account in one view</li><li>Rules that calm emotional trades</li></ul><p>Korean only</p></div>
    <div class="mp-app" aria-label="Money Pie screen (sample data)">
  <div class="mp-tk"><div><span>KOSPI</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#e86a8e" stroke-width="1.4" points="0,14 10,12 20,13 30,9 40,10 50,6 60,5"/></svg></div><div><span>NASDAQ</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#e86a8e" stroke-width="1.4" points="0,15 10,13 20,11 30,12 40,8 50,7 60,4"/></svg></div><div><span>S&amp;P 500</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#e86a8e" stroke-width="1.4" points="0,13 10,12 20,12 30,9 40,9 50,7 60,6"/></svg></div><div><span>US 10Y</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#5bb8e0" stroke-width="1.4" points="0,6 10,7 20,9 30,8 40,11 50,12 60,13"/></svg></div><div><span>USD/KRW</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#e86a8e" stroke-width="1.4" points="0,12 10,11 20,12 30,10 40,8 50,9 60,7"/></svg></div><div><span>Gold</span><svg viewBox="0 0 60 18"><polyline fill="none" stroke="#e86a8e" stroke-width="1.4" points="0,15 10,14 20,12 30,11 40,8 50,6 60,3"/></svg></div></div>
  <div class="mp-hd"><b>MONEY PIE</b><span class="mp-tabs"><i>Monthly</i><i class="on">Assets</i><i>V1</i><i>Watchlist</i></span></div>
@@ -493,8 +501,9 @@ body.at-top .dropzone{display:block}
 <div class="dtme-ov" id="popDtmd" onclick="if(!event.target.closest('.dtme-pop')&&!this.classList.contains('stage'))popClose()">
  <div class="pop-bg"><video data-src="v3/fish.mp4" poster="v3/fish-poster.jpg" muted loop playsinline preload="none"></video></div>
  <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="popDtmdT">
-  <div class="dtme-hd"><h2 id="popDtmdT">DTMD</h2><p>Don’t Touch Maximum Depth — Dive Planner &amp; Logbook</p><a class="pop-open" href="https://scuba.kangyonz.com/" onclick="popGo(this,event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
+  <div class="dtme-hd"><h2 id="popDtmdT">DTMD</h2><p>Dive Planner &amp; Logbook</p><a class="pop-open" href="https://scuba.kangyonz.com/" onclick="popGo(this,event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
   <div class="dtme-bd">
+   <div class="pop-pts"><ul><li>Plan, learn and log your dives in one app</li><li>Imports Garmin, Suunto and more</li><li>Free · 9 languages · No install</li></ul><p>Photo log · Works with DTME</p></div>
    <div class="dt-shots"><img src="v3/dtmd-shot1.webp" alt="DTMD planner screen" loading="lazy"><img src="v3/dtmd-shot2.webp" alt="DTMD logbook screen" loading="lazy"></div>
    <div class="dtme-ft"><div><b>Dive Planner</b><span>Draw a depth profile and see the no-deco limit, ceiling and a suggested ascent.</span></div><div><b>3-Minute Tutorial</b><span>A voice-guided lesson on no-deco and deco basics.</span></div><div><b>Logbook Import</b><span>Reads FIT, UDDF and Suunto JSON from Garmin, Suunto, Amazfit and more.</span></div><div><b>Depth Graph &amp; Map</b><span>Replay each dive with entry and exit points on the map.</span></div><div><b>Photos &amp; Notes</b><span>Keep photos and memos with every dive.</span></div><div><b>9 Languages</b><span>English, Korean, Japanese, Chinese (Simplified &amp; Traditional), German, Spanish, French and Italian.</span></div></div>
    <p class="dtme-spec">Web app · iPhone, Android &amp; PC · Add to Home Screen · Logs stay on your device</p>
@@ -505,9 +514,10 @@ body.at-top .dropzone{display:block}
 <div class="dtme-ov" id="popDtmc" onclick="if(!event.target.closest('.dtme-pop')&&!this.classList.contains('stage'))popClose()">
  <div class="pop-bg"><img src="v3/dtmc-bg.webp" alt=""></div>
  <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="popDtmcT">
-  <div class="dtme-hd"><h2 id="popDtmcT">DTMC</h2><p>Desktop Music Composer</p><a class="pop-open" href="#" onclick="popSoon(event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
+  <div class="dtme-hd"><h2 id="popDtmcT">DTMC</h2><p>Music Composer</p><a class="pop-open" href="#" onclick="popSoon(event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
   <div class="dtme-bd">
-   <div class="mo-vis"><img src="v3/dtmc-bg.webp" alt="" loading="lazy"><p>Details coming soon.</p></div>
+   <div class="pop-pts"><ul><li>New music from a song you like</li><li>Any length, 10 sec to 10 min</li><li>Runs locally on your PC</li></ul><p>Windows only · Best with NVIDIA GPU</p></div>
+   <div class="mo-vis"><img src="v3/dtmc-bg.webp" alt="" loading="lazy"></div>
    <div class="dtme-pay"><code>kangyonz@gmail.com</code></div>
   </div>
  </div>
@@ -515,8 +525,9 @@ body.at-top .dropzone{display:block}
 <div class="dtme-ov" id="popWeb" onclick="if(!event.target.closest('.dtme-pop')&&!this.classList.contains('stage'))popClose()">
  <div class="pop-bg"><img src="v3/wmw-bg.webp" alt=""></div>
  <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="popWebT">
-  <div class="dtme-hd"><h2 id="popWebT">WMW</h2><p>Web Made in Web — Website Editor</p><a class="pop-open" href="https://site.kangyonz.com/" onclick="popGo(this,event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
+  <div class="dtme-hd"><h2 id="popWebT">WMW</h2><p>Website Editor</p><a class="pop-open" href="https://site.kangyonz.com/" onclick="popGo(this,event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
   <div class="dtme-bd">
+   <div class="pop-pts"><ul><li>No sign-up</li><li>Edit right on the page</li><li>Export pure HTML. Host anywhere</li></ul><p>Desktop browser · Korean &amp; English</p></div>
    <div class="wm-shot"><img src="v3/wmw-shot.webp" alt="WMW editor screen" loading="lazy"></div>
    <div class="dtme-ft">
     <div><b>Templates &amp; Site Sets</b><span>Pick from 24 layouts and 11 ready-made site sets, then make them yours.</span></div>
@@ -534,9 +545,10 @@ body.at-top .dropzone{display:block}
 <div class="dtme-ov" id="popMosco" onclick="if(!event.target.closest('.dtme-pop')&&!this.classList.contains('stage'))popClose()">
  <div class="pop-bg"><img src="v3/mosco-bg.webp" alt=""></div>
  <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="popMoscoT">
-  <div class="dtme-hd"><h2 id="popMoscoT">MOSCO</h2><p>Photo Touch-up</p><a class="pop-open" href="#" onclick="popSoon(event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
+  <div class="dtme-hd"><h2 id="popMoscoT">MOSCO</h2><p>Face Retouch for Broadcast</p><a class="pop-open" href="#" onclick="popSoon(event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button></div>
   <div class="dtme-bd">
-   <div class="mo-vis"><img src="v3/mosco-bg.webp" alt="" loading="lazy"><p>Details coming soon.</p></div>
+   <div class="pop-pts"><ul><li>Smooth skin on video</li><li>Blur every face in a crowd</li><li>Broadcast-ready ProRes output</li></ul><p>Windows only · Full HD only</p></div>
+   <div class="mo-vis"><img src="v3/mosco-bg.webp" alt="" loading="lazy"></div>
    
    
    <div class="dtme-pay"><code>kangyonz@gmail.com</code></div>
@@ -549,10 +561,11 @@ body.at-top .dropzone{display:block}
  <div class="dtme-pop" role="dialog" aria-modal="true" aria-labelledby="dtmeTitle">
   <div class="dtme-hd">
    <h2 id="dtmeTitle">DTME</h2>
-   <p>Diving Tour Movie Editor</p>
+   <p>Dive Movie Editor</p>
    <a class="pop-open" href="#" onclick="popSoon(event)">Open ↗</a><button class="dtme-x" onclick="popClose()" aria-label="Close">✕</button>
   </div>
   <div class="dtme-bd">
+   <div class="pop-pts"><ul><li>One click to a finished film</li><li>Depth graph from your dive log</li><li>Cuts on the beat. Auto color</li></ul><p>Windows only · 4K · Vertical for Reels &amp; Shorts</p></div>
 
    <div class="dtme-app" aria-label="DTME editor window">
     <div class="dtme-app-t">DTME v0.16.95 — dive_2025_10.dtme.json</div>

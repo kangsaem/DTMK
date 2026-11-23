@@ -12,6 +12,8 @@
 
 ## v3 현재 구성 (위→아래)
 **WMW (2026-11-20)**: 웹 편집기 앱 이름 = WMW (Web made in web), 저장소 kangsaem/SITE, 주소 site.kangyonz.com. 팝업 popWeb: 제목 'WMW'(DTMD처럼 글자), 부제 'Web Made in Web — Website Editor'(긴 로고 wmw-logo.svg는 미사용), 화면 wmw-shot.webp(SITE app/ 편집기를 1440×900으로 캡처), 기능 6개(SITE README·HANDOFF 기준: 레이아웃 24·세트 11, 화면에서 바로 고치기, 효과, PC·태블릿·모바일, 순수 HTML·ZIP 내보내기, 무료·가입 없음), [Open ↗] → site.kangyonz.com.
+**팝업 핵심 문구 (2026-11-23, 사용자 확정)**: 각 팝업 본문 맨 위 `.pop-pts` = 굵은 장점 3줄 + 회색 한계 한 줄(그 아래 기존 그림·기능 6칸 유지). 부제: WMW Website Editor / MONEY PIE Portfolio Tracker / DTMD Dive Planner & Logbook / DTME Dive Movie Editor / DTMC Music Composer / MOSCO Face Retouch for Broadcast. DTMC·MOSCO 'Details coming soon.' 삭제(핵심 문구로 대체). 근거 = 각 저장소 README(MOSCO는 방송 영상 얼굴 처리: 뷰티·군중 블러·ProRes). DTME '4K' = 사용자 확인(그대로).
+
 **머니파이 순환 (2026-11-23)**: 한 장 3초 보이고 1초 디졸브(전환 1s, 간격 4s, 3장 = 한 바퀴 12초), 다음 장은 0.8초 먼저 줌 시작.
 
 **2026-11-23 변경 — 커서=영상, 클릭=바로 팝업**: 첫 화면 아이콘에 커서를 올리면 배경으로 각 앱 영상 재생 (DTMD fish.mp4 반복 / DTME·DTMC·MOSCO = 사용자 원본 영상(카톡 mp4, AUTO·글자 없음)에서 DomoAI 워터마크를 delogo로 지우고 소리 뺀 *-loop.mp4, **디졸브 루프**: 끝 1초를 처음 1초와 xfade로 겹쳐 구운 영상(길이 = 원본−1초, 이음새 차이가 일반 프레임 간 차이 수준) + loop 속성 / WMW = 루마 원본 wmw-loop.mp4 (같은 디졸브 루프) / 머니파이는 사진 순환 그대로). 영상은 커서를 올릴 때만 받음(load 때는 그림만). 클릭하면 시작 영상(#splash) 없이 바로 설명 팝업 — 첫 화면 아이콘이면 live 모드(재생 중 배경 위 블러). #splash·*-start.mp4 코드는 남아 있지만 호출 안 함. 이전 그림 배경(dtme-bg·dtmc-bg·mosco-bg·wmw-bg.webp)은 팝업 배경용으로만 남음.
