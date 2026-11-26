@@ -15,8 +15,6 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
     steps:
       - uses: actions/checkout@v4
         with:
@@ -49,15 +47,7 @@ jobs:
           git config user.name 'sync-bot'; git config user.email 'sync-bot@users.noreply.github.com'
           git add -A
           if git diff --cached --quiet; then echo "변경 없음 $SHA"; else git commit -qm "sync DTMD from DTMP $SHA" && git push -q; fi
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v5
-        with:
-          path: me
-      - id: deployment
-        uses: actions/deploy-pages@v5
-        continue-on-error: true          # 2026-11-26: 배포 단계가 'artifact 0개'로 자주 실패 → 1분 뒤 한 번 더
-      - if: steps.deployment.outcome == 'failure'
-        run: sleep 60
-      - id: deployment2
-        if: steps.deployment.outcome == 'failure'
-        uses: actions/deploy-pages@v5
+      - name: Pages 다시 빌드 요청   # 2026-11-26 배포 방식 = 브랜치(main), 봇 커밋은 자동 빌드가 안 될 수 있어서
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST repos/${{ github.repository }}/pages/builds || true
