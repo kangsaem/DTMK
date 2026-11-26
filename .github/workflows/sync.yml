@@ -1,6 +1,6 @@
-# kangyonz.com 본 주소 = DTMD(다이빙 앱). moneypiee의 scuba.html·dtmd 파일만 복사해 배포. 10분마다. 광고 없음(본 주소는 광고 안 함).
+# kangyonz.com 본 주소 = DTMD(다이빙 앱). DTMP(원본, 2026-11-26 moneypiee에서 옮김)의 scuba.html·dtmd 파일만 복사해 배포. 10분마다. 광고 없음(본 주소는 광고 안 함).
 # proto/ = 개편 시안 폴더. sync가 지우지 않음(kangyonz.com/proto/). 버전별 v1, v2… 보존.
-name: sync-dtmd-from-moneypiee
+name: sync-dtmd-from-dtmp
 on:
   schedule:
     - cron: '*/10 * * * *'
@@ -23,7 +23,7 @@ jobs:
           path: me
       - uses: actions/checkout@v4
         with:
-          repository: kangsaem/moneypiee
+          repository: kangsaem/DTMP
           path: src
       - name: 복사
         run: |
@@ -48,7 +48,7 @@ jobs:
           cd me
           git config user.name 'sync-bot'; git config user.email 'sync-bot@users.noreply.github.com'
           git add -A
-          if git diff --cached --quiet; then echo "변경 없음 $SHA"; else git commit -qm "sync DTMD from moneypiee $SHA" && git push -q; fi
+          if git diff --cached --quiet; then echo "변경 없음 $SHA"; else git commit -qm "sync DTMD from DTMP $SHA" && git push -q; fi
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v5
         with:
